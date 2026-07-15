@@ -1,26 +1,132 @@
+/* app/globals.css */
+/* ============================================================ */
+/* TAILWIND v4 — IMPORT DEL FRAMEWORK                          */
+/* ============================================================ */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================ */
+/* TEMA PERSONALIZZATO — Colori OFF STAGE                      */
+/* ============================================================ */
+@theme {
+  --color-off-black: #0A0A0A;
+  --color-off-cream: #F2EDE4;
+  --color-off-amber: #E0A96D;
+  --color-off-gray: #6B6B6B;
+
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================================================ */
+/* RESET BASE                                                   */
+/* ============================================================ */
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html,
+body {
+  background: #0A0A0A;
+  color: #F2EDE4;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: sans-serif;
+}
+
+/* ============================================================ */
+/* SCROLLBAR PERSONALIZZATA                                     */
+/* ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0A;
+}
+::-webkit-scrollbar-thumb {
+  background: #E0A96D;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 169, 109, 0.7);
+}
+
+/* ============================================================ */
+/* EFFETTI SPECIALI — per Hero e Soluzione                     */
+/* ============================================================ */
+
+/* 1. SHIMMER — testo luccicante (usato su "Al resto pensiamo noi.") */
+.shimmer-text {
+  background: linear-gradient(
+    135deg,
+    #F2EDE4 20%,
+    #E0A96D 40%,
+    #F2EDE4 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 2. GLOW PULSE — bagliore che pulsa (usato sul pulsante CALCOLA) */
+.glow-pulse {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 40px rgba(224, 169, 109, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(224, 169, 109, 0.35);
+  }
+}
+
+/* 3. TEXT STROKE — effetto bordo trasparente (usato su "OFF STAGE" in background) */
+.stroke-text {
+  -webkit-text-stroke: 2px rgba(224, 169, 109, 0.12);
+  color: transparent;
+}
+
+/* 4. HOVER RIPPLE — onda al passaggio del mouse (usato su WhatsApp) */
+.ripple-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-hover::after {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle, rgba(224, 169, 109, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+}
+
+.ripple-hover:hover::after {
+  opacity: 1;
+  transform: scale(2);
+}
+
+/* 5. MAGNETIC BUTTON — effetto attrazione mouse (già implementato in JS) */
+.magnetic-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magnetic-hover:hover {
+  transform: scale(1.03);
 }
