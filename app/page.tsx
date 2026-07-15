@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar"
 import { HeroPro } from "@/components/HeroPro"
 import { Soluzione } from "@/components/Soluzione"
 import { TeaserCalcolatore } from "@/components/TeaserCalcolatore"
+import { ComeFunziona } from "@/components/ComeFunziona"
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <HeroPro />
         <Soluzione />
         <TeaserCalcolatore />
+        <ComeFunziona />
       </main>
     </>
   )
