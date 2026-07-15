@@ -86,15 +86,8 @@ export function Soluzione() {
     <section className="relative w-full min-h-screen bg-[#0A0A0A] text-[#F2EDE4] flex items-center pt-24 pb-20 overflow-hidden">
       
       {/* ============================================================
-          SCRITTA "OFF STAGE" IN SOLUZIONE: PIENA AMBRA (Taglio Netto)
+          SCRITTA "OFF STAGE" — RIMOSSA (era qui)
           ============================================================ */}
-      <div className="absolute top-0 left-0 right-0 z-0 flex justify-center pointer-events-none -translate-y-1/2 select-none">
-        <span
-          className="font-sans font-black text-[clamp(6rem,22vw,19rem)] tracking-[-0.04em] leading-none uppercase text-[#E0A96D] opacity-15"
-        >
-          OFF STAGE
-        </span>
-      </div>
 
       {/* GLOW DI PROFONDITÀ AMBIENTALE */}
       <div className="absolute inset-0 z-0 pointer-events-none">

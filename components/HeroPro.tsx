@@ -113,17 +113,11 @@ export function HeroPro() {
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 z-[1] w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[200px] mix-blend-screen" />
       <div className="absolute bottom-1/3 right-1/3 z-[1] w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[150px] mix-blend-screen" />
 
-      {/* SCRITTA "OFF STAGE" IN HERO */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center pointer-events-none translate-y-1/2 select-none">
-        <span
-          className="font-sans font-black text-[clamp(6rem,22vw,19rem)] tracking-[-0.04em] leading-none uppercase text-transparent"
-          style={{ WebkitTextStroke: "1px rgba(242, 237, 228, 0.25)" }}
-        >
-          OFF STAGE
-        </span>
-      </div>
+      {/* ============================================================
+          SCRITTA "OFF STAGE" — RIMOSSA (era qui)
+          ============================================================ */}
 
-      {/* CONTENUTO PRINCIPALE — CORRETTO */}
+      {/* CONTENUTO PRINCIPALE */}
       <div className="relative z-10 h-full flex items-center" style={{ perspective: "1000px" }}>
         <motion.div
           className="max-w-7xl mx-auto w-full px-4 md:px-8"
