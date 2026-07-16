@@ -6,6 +6,7 @@ import { Soluzione } from "@/components/Soluzione"
 import { TeaserCalcolatore } from "@/components/TeaserCalcolatore"
 import { ComeFunziona } from "@/components/ComeFunziona"
 import { PercheNoi } from "@/components/PercheNoi"
+import { Testimonianze } from "@/components/Testimonianze"
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
         <TeaserCalcolatore />
         <ComeFunziona />
         <PercheNoi />
+        <Testimonianze />
       </main>
     </>
   )
