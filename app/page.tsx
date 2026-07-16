@@ -8,6 +8,7 @@ import { ComeFunziona } from "@/components/ComeFunziona"
 import { PercheNoi } from "@/components/PercheNoi"
 import { Testimonianze } from "@/components/Testimonianze"
 import { CTAFinale } from "@/components/CTAFinale"
+import { Footer } from "@/components/Footer"
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <PercheNoi />
         <Testimonianze />
         <CTAFinale />
+        <Footer />
       </main>
     </>
   )
