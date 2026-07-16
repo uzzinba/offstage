@@ -5,6 +5,7 @@ import { HeroPro } from "@/components/HeroPro"
 import { Soluzione } from "@/components/Soluzione"
 import { TeaserCalcolatore } from "@/components/TeaserCalcolatore"
 import { ComeFunziona } from "@/components/ComeFunziona"
+import { PercheNoi } from "@/components/PercheNoi"
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <Soluzione />
         <TeaserCalcolatore />
         <ComeFunziona />
+        <PercheNoi />
       </main>
     </>
   )
