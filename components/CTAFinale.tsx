@@ -135,8 +135,8 @@ export function CTAFinale() {
               </span>
             </h2>
 
-            <p className="font-sans font-light text-[#F2EDE4]/40 text-sm md:text-base max-w-[45ch] mx-auto leading-relaxed">
-              Nessuna pressione. Solo la certezza che qualcuno si occupa di tutto il resto.
+            <p className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base max-w-[45ch] mx-auto leading-relaxed">
+              La scelta giusta per l&apos;esibizione in regola, dal 1991.
             </p>
           </motion.div>
 
@@ -145,9 +145,9 @@ export function CTAFinale() {
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center gap-4 mt-4"
           >
-            {/* Pulsante primario — calcolatore */}
+            {/* Pulsante primario — Contattaci */}
             <button className="group relative flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] hover:scale-[1.02] font-sans font-medium text-sm tracking-[0.15em] uppercase cursor-pointer select-none">
-              <span className="relative z-10">Calcola quanto ti resta</span>
+              <span className="relative z-10">Contattaci</span>
               <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
             </button>
 

@@ -147,7 +147,7 @@ export function HeroPro() {
             </motion.h2>
 
             <motion.p
-              className="font-sans font-light text-[#F2EDE4]/40 text-sm md:text-base max-w-[50ch] leading-relaxed mt-4 tracking-wide"
+              className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base max-w-[50ch] leading-relaxed mt-4 tracking-wide"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
@@ -193,7 +193,7 @@ export function HeroPro() {
                     }}
                   />
                   <span className="relative z-10 text-black text-[11px] tracking-[0.2em] uppercase font-sans font-medium">
-                    CALCOLA QUANTO TI RESTA
+                    SCOPRI DI PIÙ
                   </span>
                   <div className="relative z-10 flex items-center justify-center w-8 h-8 rounded-full bg-black/10">
                     <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-0.5 transition-transform duration-300" />
@@ -238,7 +238,7 @@ export function HeroPro() {
                     }}
                   />
                   <span className="relative z-10 text-[#F2EDE4] group-hover:text-amber-400 transition-colors duration-500 text-[11px] tracking-[0.2em] uppercase font-sans font-light">
-                    Scrivici su WhatsApp
+                    Contattaci
                   </span>
                 </button>
               </div>

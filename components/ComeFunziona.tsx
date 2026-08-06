@@ -3,22 +3,26 @@
 import { useRef, useEffect, useState } from "react"
 import { motion, useInView, useSpring, useTransform, Variants } from "framer-motion"
 import { ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 const steps = [
   {
     number: "01",
     title: "Ti iscrivi",
     description: "Entri nella cooperativa e siamo subito operativi per te.",
+    slug: "iscrizione",
   },
   {
     number: "02",
     title: "Ci scrivi prima di ogni data",
-    description: "Un messaggio su WhatsApp: pensiamo noi ad aprire agibilità e pratiche.",
+    description: "Ci comunichi la data e a tutto il resto pensiamo noi.",
+    slug: "comunicazione",
   },
   {
     number: "03",
     title: "Sali sul palco",
     description: "Tu suoni. Fatture, contributi e buste paga li gestiamo noi.",
+    slug: "palco",
   },
 ]
 
@@ -112,9 +116,9 @@ export function ComeFunziona() {
   return (
     <section
       ref={ref}
-      className="relative w-full py-24 md:py-32 overflow-hidden bg-[#F2EDE4]"
+      className="relative w-full py-24 md:py-32 overflow-hidden bg-[#0A0A0A]"
     >
-      {/* SFONDO — GLOW DOLCE */}
+      {/* SFONDO — GLOW DOLCE (adattato al dark) */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-amber-400/8 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-400/5 rounded-full blur-[150px]" />
@@ -134,12 +138,12 @@ export function ComeFunziona() {
               className="font-sans font-bold leading-[1.05] tracking-tight shimmer-text"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                background: "linear-gradient(135deg, #0A0A0A 20%, #E0A96D 50%, #0A0A0A 80%)",
+                background: "linear-gradient(135deg, #F2EDE4 20%, #E0A96D 50%, #F2EDE4 80%)",
                 backgroundSize: "200% 100%",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
-                animation: "shimmer 6s ease-in-out infinite", // ← PIÙ LENTO
+                animation: "shimmer 6s ease-in-out infinite",
               }}
             >
               Semplice come dovrebbe essere.
@@ -147,7 +151,7 @@ export function ComeFunziona() {
 
             <motion.p
               variants={itemVariants}
-              className="font-sans font-light text-[#0A0A0A]/50 text-base md:text-lg mt-3"
+              className="font-sans font-light text-[#F2EDE4]/60 text-base md:text-lg mt-3"
             >
               Il tuo percorso verso il palco.
             </motion.p>
@@ -156,7 +160,7 @@ export function ComeFunziona() {
           {/* TIMELINE VERTICALE — SENZA NUMERI NEI CERCHI */}
           <div className="relative max-w-2xl mx-auto w-full pt-8 pb-4">
             {/* Linea di sfondo */}
-            <div className="absolute left-[30px] top-0 bottom-0 w-[3px] bg-[#0A0A0A]/8 rounded-full" />
+            <div className="absolute left-[30px] top-0 bottom-0 w-[3px] bg-[#F2EDE4]/10 rounded-full" />
 
             {/* Linea di luce che si riempie */}
             <motion.div
@@ -195,9 +199,9 @@ export function ComeFunziona() {
                 >
                   {/* PALLINO INDICATORE */}
                   <motion.div
-                    className="relative z-10 w-3 h-3 rounded-full bg-[#F2EDE4] border-2 transition-colors duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
+                    className="relative z-10 w-3 h-3 rounded-full bg-[#0A0A0A] border-2 transition-colors duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
                     style={{
-                      borderColor: stepProgress > 0.5 ? "#E0A96D" : "#0A0A0A/10",
+                      borderColor: stepProgress > 0.5 ? "#E0A96D" : "#F2EDE4/20",
                       boxShadow: stepProgress > 0.5
                         ? "0 0 30px rgba(224,169,109,0.2)"
                         : "0 4px 20px rgba(0,0,0,0.04)",
@@ -221,21 +225,30 @@ export function ComeFunziona() {
                         color: stepProgress > 0.7
                           ? "#E0A96D"
                           : stepProgress > 0.3
-                            ? "#0A0A0A/60"
-                            : "#0A0A0A/20",
+                            ? "#F2EDE4/60"
+                            : "#F2EDE4/20",
                         opacity: stepProgress > 0.1 ? 1 : 0.3,
                       }}
                     >
                       {step.number}
                     </span>
 
-                    <h3 className="font-sans font-bold text-[#0A0A0A] text-2xl mt-2">
+                    <h3 className="font-sans font-bold text-[#F2EDE4] text-2xl mt-2">
                       {step.title}
                     </h3>
 
-                    <p className="font-sans font-light text-[#0A0A0A]/50 text-base md:text-lg mt-1 max-w-[40ch] leading-relaxed">
+                    <p className="font-sans font-light text-[#F2EDE4]/60 text-base md:text-lg mt-1 max-w-[40ch] leading-relaxed">
                       {step.description}
                     </p>
+
+                    {/* Link Approfondisci */}
+                    <Link
+                      href={`/approfondisci/${step.slug}`}
+                      className="inline-flex items-center gap-1 text-[#E0A96D] text-sm font-medium mt-3 hover:underline transition-colors"
+                    >
+                      Approfondisci
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
 
                     {/* Linea decorativa sotto ogni step */}
                     <motion.div
@@ -243,7 +256,7 @@ export function ComeFunziona() {
                       style={{
                         background: stepProgress > 0.7
                           ? "linear-gradient(to right, #E0A96D, #E0A96D/40)"
-                          : "linear-gradient(to right, #0A0A0A/20, #0A0A0A/5)",
+                          : "linear-gradient(to right, #F2EDE4/20, #F2EDE4/5)",
                       }}
                     />
                   </motion.div>
@@ -252,7 +265,7 @@ export function ComeFunziona() {
             })}
           </div>
 
-          {/* BLOCCO PREZZO */}
+          {/* BLOCCO PREZZO — con "a partire da" */}
           <motion.div
             ref={priceRef}
             variants={itemVariants}
@@ -283,7 +296,7 @@ export function ComeFunziona() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                   >
-                    € {priceCount}
+                    a partire da € {priceCount}
                   </motion.span>
                   <span className="font-sans font-light text-[#F2EDE4]/30 text-xl mt-2">
                     / anno
@@ -291,12 +304,16 @@ export function ComeFunziona() {
                 </div>
 
                 <motion.p
-                  className="font-sans font-light text-[#F2EDE4]/50 text-sm md:text-base mt-3 max-w-[45ch] mx-auto leading-relaxed"
+                  className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base mt-3 max-w-[45ch] mx-auto leading-relaxed"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: priceInView ? 1 : 0, y: priceInView ? 0 : 10 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
                 >
                   Con <span className="text-[#E0A96D] font-medium">75 € all'anno</span> hai un ufficio amministrativo dedicato.
+                  <br />
+                  <span className="text-[#F2EDE4]/40 text-xs">
+                    * Potrebbero applicarsi costi aggiuntivi in base alle tue esigenze specifiche.
+                  </span>
                 </motion.p>
 
                 <motion.div

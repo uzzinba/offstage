@@ -100,7 +100,7 @@ export function Testimonianze() {
           <div className="text-center max-w-3xl mx-auto">
             <motion.span
               variants={itemVariants}
-              className="font-sans text-[#E0A96D]/60 text-xs tracking-[0.3em] uppercase font-medium"
+              className="font-sans text-[#E0A96D]/60 text-[11px] tracking-[0.3em] uppercase font-medium"
             >
               TESTIMONIANZE
             </motion.span>
@@ -118,7 +118,7 @@ export function Testimonianze() {
 
             <motion.p
               variants={itemVariants}
-              className="font-sans font-light text-[#F2EDE4]/50 text-base md:text-lg mt-4 max-w-[50ch] mx-auto"
+              className="font-sans font-light text-[#F2EDE4]/60 text-base md:text-lg mt-4 max-w-[50ch] mx-auto"
             >
               Storie vere di chi ha scelto di suonare senza pensieri.
             </motion.p>
@@ -130,7 +130,7 @@ export function Testimonianze() {
                 key={colIndex}
                 items={colonna}
                 direction={colIndex % 2 === 0 ? 1 : -1}
-                speed={colIndex % 2 === 0 ? 0.15 : 0.1} // ← PIÙ LENTE
+                speed={colIndex % 2 === 0 ? 0.15 : 0.1}
               />
             ))}
 
@@ -206,7 +206,7 @@ function ScrollableColumn({
             key={`${item.id}-${index}`}
             className="p-5 md:p-6 rounded-xl border border-white/5 bg-white/5 backdrop-blur-sm hover:border-[#E0A96D]/30 transition-all duration-300 group"
           >
-            <p className="font-serif italic text-[#F2EDE4]/70 text-sm md:text-base leading-relaxed">
+            <p className="font-sans text-[#F2EDE4]/80 text-sm md:text-base leading-relaxed">
               "{item.citazione}"
             </p>
             <p className="font-sans text-[#F2EDE4]/30 text-xs tracking-[0.1em] uppercase mt-3">

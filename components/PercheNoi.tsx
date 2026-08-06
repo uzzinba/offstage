@@ -51,18 +51,18 @@ export function PercheNoi() {
   const contrastItems = [
     {
       portal: "Compili moduli senza fine",
-      offstage: "Ti iscrivi in 5 minuti",
+      offstage: "Iscrizione rapida e guidata da noi",
     },
     {
       portal: "Apri ticket e aspetti",
-      offstage: "Ci scrivi su WhatsApp e ti rispondiamo subito",
+      offstage: "Trovi sempre qualcuno per risolvere i problemi",
     },
     {
-      portal: "Ricevi risposte standard",
-      offstage: "Parli con una persona che ti conosce",
+      portal: "Non sai mai chi ti segue",
+      offstage: "Sai chi ti segue e come lavora",
     },
     {
-      portal: "Sei un numero",
+      portal: "Sei solo un numero",
       offstage: "Sei uno dei nostri artisti",
     },
   ]
@@ -88,7 +88,7 @@ export function PercheNoi() {
           <div className="text-center max-w-3xl mx-auto">
             <motion.span
               variants={itemVariants}
-              className="font-sans text-[#E0A96D]/60 text-xs tracking-[0.3em] uppercase font-medium"
+              className="font-sans text-[#E0A96D]/60 text-[11px] tracking-[0.3em] uppercase font-medium"
             >
               PERCHÉ NOI
             </motion.span>
@@ -107,7 +107,7 @@ export function PercheNoi() {
 
             <motion.p
               variants={itemVariants}
-              className="font-sans font-light text-[#F2EDE4]/50 text-base md:text-lg mt-4 max-w-[50ch] mx-auto"
+              className="font-sans font-light text-[#F2EDE4]/60 text-base md:text-lg mt-4 max-w-[50ch] mx-auto"
             >
               La differenza tra un portale automatico e un team di persone che ti segue davvero.
             </motion.p>
@@ -175,7 +175,7 @@ export function PercheNoi() {
             </motion.div>
           </motion.div>
 
-          {/* CARD DI NICOLE — FRASE RIMOSSA */}
+          {/* CARD DI NICOLE — TESTO MODIFICATO */}
           <motion.div
             variants={itemVariants}
             className="relative p-8 md:p-12 rounded-3xl border border-white/5 bg-white/5 backdrop-blur-sm overflow-hidden"
@@ -228,7 +228,7 @@ export function PercheNoi() {
                 </div>
 
                 <blockquote className="font-serif italic text-[#F2EDE4]/70 text-lg md:text-xl leading-relaxed max-w-[50ch]">
-                  "Dietro OFF STAGE ci sono persone vere. Conosciamo i nostri artisti, sappiamo come lavorano e di cosa hanno bisogno."
+                  "Dietro OFF STAGE ci sono persone vere. Conosciamo le esigenze di chi suona e lavora nel mondo della musica."
                 </blockquote>
               </div>
             </div>

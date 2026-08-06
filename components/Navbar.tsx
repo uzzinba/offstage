@@ -66,11 +66,11 @@ export function Navbar() {
         className={`pointer-events-auto relative flex items-center justify-center gap-8 px-8 h-14 rounded-full border transition-all duration-500 backdrop-blur-xl overflow-hidden ${
           scrolled
             ? "border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
-            : "border-white/5"
+            : "border-white/15"
         }`}
         style={{
           background:
-            "linear-gradient(180deg, rgba(24,24,24,0.92) 0%, rgba(10,10,10,0.88) 100%)",
+  "linear-gradient(180deg, rgba(20,20,20,0.98) 0%, rgba(8,8,8,0.95) 100%)",
         }}
       >
         {/* ============================================================

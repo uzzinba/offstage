@@ -211,7 +211,7 @@ export function TeaserCalcolatore() {
                 <span className="font-serif italic text-[#E0A96D]">Quanto ti resta</span>
                 <span className="font-sans font-bold block mt-1 sm:inline sm:mt-0"> davvero di una serata?</span>
               </h2>
-              <p className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base mt-4 max-w-[50ch] mx-auto leading-relaxed">
+              <p className="font-sans font-light text-[#F2EDE4]/80 text-sm md:text-base mt-4 max-w-[50ch] mx-auto leading-relaxed">
                 La risposta alla domanda che riceviamo più spesso. Inserisci il compenso e scopri il tuo netto in meno di 10 secondi.
               </p>
               <div className="flex justify-center mt-8">

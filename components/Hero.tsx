@@ -88,7 +88,7 @@ export function Hero() {
               size="lg"
               className="border-[#F2EDE4]/30 text-[#F2EDE4] hover:bg-[#F2EDE4]/10 hover:border-[#F2EDE4] px-8 py-6 text-sm tracking-wider"
             >
-              CALCOLA QUANTO TI RESTA
+              SCOPRI DI PIÙ
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>

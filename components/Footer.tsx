@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { MessageCircle, Mail } from "lucide-react"
+import { MessageCircle, Mail, Phone } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -51,7 +51,6 @@ export function Footer() {
               Contatti
             </span>
 
-            {/* CONTATTI — IN COLONNA VERTICALE */}
             <div className="mt-3 flex flex-col gap-3">
               {/* WhatsApp */}
               <a
@@ -59,17 +58,23 @@ export function Footer() {
                 className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
               >
                 <MessageCircle className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
-                <span className="text-sm font-medium">Scrivici su WhatsApp</span>
+                <span className="text-sm">Scrivici su WhatsApp</span>
               </a>
 
-              {/* Email — SOTTO WHATSAPP */}
+              {/* Email — SEDE PRINCIPALE */}
               <a
                 href="mailto:offstagecoop.nicole@gmail.com"
                 className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
               >
                 <Mail className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
-                <span className="text-sm font-medium">offstagecoop.nicole@gmail.com</span>
+                <span className="text-sm">offstagecoop.nicole@gmail.com</span>
               </a>
+
+              {/* Telefono / Ufficio Milano */}
+              <div className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4]/50 text-sm">
+                <Phone className="w-5 h-5 text-[#E0A96D]" />
+                <span>+39 02 1234567 — Milano</span>
+              </div>
             </div>
           </div>
         </div>

@@ -1,94 +1,56 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { FileText, ClipboardCheck, Users, Shield, Receipt, HelpCircle } from "lucide-react"
+import { FileText, Users, Shield, HelpCircle, ChevronLeft, ChevronRight } from "lucide-react"
 
 const serviziData = [
   {
     id: 1,
-    title: "Apriamo la tua agibilità",
-    description: "Pratiche INPS ex ENPALS e scadenza tassativa per ogni ingaggio, in Italia e all'estero. La gestiamo noi.",
+    title: "Apriamo la tua agibilità (ex ENPALS)",
+    description: "Pratiche INPS e INAIL. Gestiamo tutto noi.",
     icon: <FileText className="w-5 h-5" style={{ color: "#E0A96D" }} />,
   },
   {
     id: 2,
     title: "Emettiamo le tue fatture",
-    description: "Fatturazione elettronica corretta, invio allo SDI e conservazione. Puntuale, senza che tu ti perda.",
-    icon: <Receipt className="w-5 h-5" style={{ color: "#E0A96D" }} />,
+    description: "Fatturazione elettronica e invio telematico presso l'agenzia delle entrate.",
+    icon: <FileText className="w-5 h-5" style={{ color: "#E0A96D" }} />,
   },
   {
     id: 3,
     title: "Prepariamo buste paga e CU",
-    description: "Buste paga e Certificazione Unica pronte quando servono, per te e per i tuoi collaboratori.",
+    description: "Emissione buste paghe e certificazione unica per te e per i tuoi collaboratori.",
     icon: <Users className="w-5 h-5" style={{ color: "#E0A96D" }} />,
   },
   {
     id: 4,
-    title: "Versiamo i tuoi contributi",
-    description: "Calcoli, F24 e adempimenti INAIL a ogni scadenza. Ti assicuriamo di essere sempre in regola.",
-    icon: <ClipboardCheck className="w-5 h-5" style={{ color: "#E0A96D" }} />,
+    title: "Ti assistiamo nei controlli",
+    description: "In caso di necessità, ti inviamo la documentazione necessaria.",
+    icon: <HelpCircle className="w-5 h-5" style={{ color: "#E0A96D" }} />,
   },
   {
     id: 5,
-    title: "Recuperiamo l'IVA",
-    description: "Ti aiutiamo a recuperare l'IVA sugli acquisti inerenti alla tua attività.",
+    title: "Recupero crediti",
+    description: "In caso di mancati pagamenti possiamo inviare noi una PEC con valenza legale.",
     icon: <Shield className="w-5 h-5" style={{ color: "#E0A96D" }} />,
-  },
-  {
-    id: 6,
-    title: "Ti assistiamo nei controlli",
-    description: "In caso di verifiche fiscali o ispettive, ci siamo noi al tuo fianco.",
-    icon: <HelpCircle className="w-5 h-5" style={{ color: "#E0A96D" }} />,
   },
 ]
 
 export function Soluzione() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const [isHoveringSlides, setIsHoveringSlides] = useState(false)
-  const slideZoneRef = useRef<HTMLDivElement>(null)
-  const lastScrollTime = useRef(0)
 
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      if (!isHoveringSlides) return
+  const nextSlide = () => {
+    setActiveIndex((prev) => (prev + 1) % serviziData.length)
+  }
 
-      const now = performance.now()
-      if (now - lastScrollTime.current < 500) {
-        e.preventDefault()
-        return
-      }
-
-      if (e.deltaY > 0 && activeIndex < serviziData.length - 1) {
-        e.preventDefault()
-        setActiveIndex((prev) => prev + 1)
-        lastScrollTime.current = now
-      } else if (e.deltaY < 0 && activeIndex > 0) {
-        e.preventDefault()
-        setActiveIndex((prev) => prev - 1)
-        lastScrollTime.current = now
-      }
-    }
-
-    const element = slideZoneRef.current
-    if (element) {
-      element.addEventListener("wheel", handleWheel, { passive: false })
-    }
-
-    return () => {
-      if (element) {
-        element.removeEventListener("wheel", handleWheel)
-      }
-    }
-  }, [isHoveringSlides, activeIndex])
+  const prevSlide = () => {
+    setActiveIndex((prev) => (prev - 1 + serviziData.length) % serviziData.length)
+  }
 
   return (
     <section className="relative w-full min-h-screen bg-[#0A0A0A] text-[#F2EDE4] flex items-center pt-24 pb-20 overflow-hidden">
       
-      {/* ============================================================
-          SCRITTA "OFF STAGE" — RIMOSSA (era qui)
-          ============================================================ */}
-
       {/* GLOW DI PROFONDITÀ AMBIENTALE */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full blur-[160px]"
@@ -99,7 +61,7 @@ export function Soluzione() {
         
         {/* PARTE SINISTRA: Testo Fisso */}
         <div>
-          <span className="font-sans text-[#E0A96D]/60 text-xs tracking-[0.3em] uppercase font-medium">
+          <span className="font-sans text-[#E0A96D]/60 text-[11px] tracking-[0.3em] uppercase font-medium">
             I NOSTRI SERVIZI
           </span>
 
@@ -122,46 +84,13 @@ export function Soluzione() {
             Per questo ci siamo noi.
           </h3>
 
-          <p className="font-sans font-light text-[#F2EDE4]/50 text-sm md:text-base max-w-[45ch] mb-8">
-            Ecco tutto quello che succede off stage. Esplora i servizi passando sulle card.
-          </p>
-
-          {/* Indicatori */}
-          <div className="flex gap-2.5 items-center">
-            {serviziData.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
-                  index === activeIndex 
-                    ? "w-8" 
-                    : "w-2 bg-[#F2EDE4]/20 hover:bg-[#F2EDE4]/40"
-                }`}
-                style={index === activeIndex ? { backgroundColor: "#E0A96D" } : {}}
-              />
-            ))}
-          </div>
+          {/* FRASE RIMOSSA: "Ecco tutto quello che succede off stage..." */}
         </div>
 
-        {/* PARTE DESTRA: Zona Attivazione Slide */}
-        <div 
-          ref={slideZoneRef}
-          onMouseEnter={() => setIsHoveringSlides(true)}
-          onMouseLeave={() => setIsHoveringSlides(false)}
-          className={`relative h-[280px] w-full flex items-center justify-center rounded-2xl p-2 transition-all duration-300 ${
-            isHoveringSlides 
-              ? "border border-[#E0A96D]/10" 
-              : "border border-transparent"
-          }`}
-          style={isHoveringSlides ? { background: "rgba(224, 169, 109, 0.02)" } : {}}
-        >
-          <div className={`absolute -top-3 right-6 bg-[#121212] border border-white/10 px-2.5 py-1 rounded-full text-[10px] uppercase font-mono tracking-wider transition-opacity duration-300 ${
-            isHoveringSlides ? "opacity-100" : "opacity-0"
-          }`}
-          style={{ color: "#E0A96D" }}>
-            Scorri qui
-          </div>
-
+        {/* PARTE DESTRA: Zona Card con Navigazione */}
+        <div className="relative h-[280px] w-full flex items-center justify-center">
+          
+          {/* Card corrente */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
@@ -187,15 +116,48 @@ export function Soluzione() {
                   <h3 className="font-sans font-semibold text-xl text-[#F2EDE4] mb-3">
                     {serviziData[activeIndex].title}
                   </h3>
-                  <p className="font-sans font-light text-[#F2EDE4]/70 text-sm md:text-base leading-relaxed">
+                  <p className="font-sans font-light text-[#F2EDE4]/80 text-sm md:text-base leading-relaxed">
                     {serviziData[activeIndex].description}
                   </p>
                 </div>
               </div>
             </motion.div>
           </AnimatePresence>
+
+          {/* FRECCE DI NAVIGAZIONE */}
+          <button
+            onClick={prevSlide}
+            className="absolute -left-4 md:-left-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-[#0D0D0D] border border-white/10 hover:border-[#E0A96D]/40 text-[#F2EDE4]/50 hover:text-[#E0A96D] transition-all duration-300 flex items-center justify-center"
+            aria-label="Precedente"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="absolute -right-4 md:-right-6 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-[#0D0D0D] border border-white/10 hover:border-[#E0A96D]/40 text-[#F2EDE4]/50 hover:text-[#E0A96D] transition-all duration-300 flex items-center justify-center"
+            aria-label="Successivo"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
 
+      </div>
+
+      {/* PALLINI — sotto la card (a destra) */}
+      <div className="absolute bottom-10 right-0 left-0 md:left-auto md:right-[10%] flex justify-center md:justify-start gap-2.5 items-center">
+        {serviziData.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setActiveIndex(index)}
+            className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+              index === activeIndex 
+                ? "w-8" 
+                : "w-2 bg-[#F2EDE4]/20 hover:bg-[#F2EDE4]/40"
+            }`}
+            style={index === activeIndex ? { backgroundColor: "#E0A96D" } : {}}
+          />
+        ))}
       </div>
     </section>
   )
