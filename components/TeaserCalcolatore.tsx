@@ -2,10 +2,11 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence, useSpring, MotionValue, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Layers } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 // ============================================================================
-// MOTORE DI CALCOLO REALE
+// MOTORE DI CALCOLO — allineato a public/calcolatore/index.html
 // ============================================================================
 interface CalcoloResult {
   giornate: number;
@@ -16,31 +17,37 @@ interface CalcoloResult {
   fatturato: number;
 }
 
+const MIN_CONTRIB = 58.13;
+const MAX_GIORNATE = 27;
+const BUSTA_PAGA = 12.0;
+
+const calcolaGiornate = (imponibile: number) => {
+  const g = Math.floor(imponibile / 3 / MIN_CONTRIB);
+  return Math.min(MAX_GIORNATE, Math.max(1, g));
+};
+
 const calcolaDiretto = (cachet: number, esente: boolean): CalcoloResult => {
-  const quotaCoop = cachet * 0.10;
-  const bustaPaga = 12.0;
-  const giornateRaw = (cachet / 3) / 58.13;
-  const giornate = Math.max(1, Math.round(giornateRaw));
-  const tariffa = esente ? 6.60 : 29.35;
-  const contributi = giornate * tariffa;
-  const netto = Math.max(0, cachet - quotaCoop - contributi - bustaPaga);
-  return { giornate, quotaCoop, contributi, bustaPaga, netto, fatturato: cachet };
+  const giornate = calcolaGiornate(cachet);
+  const contributi = giornate * (esente ? 6.6 : 29.35);
+  const quotaCoop = cachet * 0.1;
+  const netto = Math.max(0, cachet - quotaCoop - contributi - BUSTA_PAGA);
+  return { giornate, quotaCoop, contributi, bustaPaga: BUSTA_PAGA, netto, fatturato: cachet };
 };
 
 const calcolaInverso = (nettoDesiderato: number, esente: boolean): CalcoloResult => {
-  const tariffa = esente ? 6.60 : 29.35;
-  const bustaPaga = 12.0;
-  let stimatoFatturato = (nettoDesiderato + bustaPaga) / 0.90;
-  let risultato = calcolaDiretto(stimatoFatturato, esente);
+  let stima = (nettoDesiderato + BUSTA_PAGA) / 0.9;
+  let res = calcolaDiretto(stima, esente);
   for (let i = 0; i < 5; i++) {
-    stimatoFatturato = (nettoDesiderato + risultato.contributi + bustaPaga) / 0.90;
-    risultato = calcolaDiretto(stimatoFatturato, esente);
+    stima = (nettoDesiderato + res.contributi + BUSTA_PAGA) / 0.9;
+    res = calcolaDiretto(stima, esente);
   }
-  return { ...risultato, netto: nettoDesiderato, fatturato: stimatoFatturato };
+  return { ...res, netto: nettoDesiderato, fatturato: Math.round(stima * 100) / 100 };
 };
 
+const fmt = (n: number) => n.toFixed(2).replace(".", ",");
+
 // ============================================================================
-// CONTAINER SCROLL — DEFINITO INTERNAMENTE
+// CONTAINER SCROLL — invariato
 // ============================================================================
 export const ContainerScroll = ({
   titleComponent,
@@ -109,20 +116,14 @@ export const Card = ({
 );
 
 // ============================================================================
-// TEASER CALCOLATORE — COMPONENTE PRINCIPALE
+// TEASER
 // ============================================================================
 export function TeaserCalcolatore() {
   const [modalita, setModalita] = useState<"diretta" | "inversa">("diretta");
-  const [esente, setEsente] = useState<boolean>(false);
-  const [valoreInput, setValoreInput] = useState<number>(400);
-  const [datiCalcolati, setDatiCalcolati] = useState<CalcoloResult>({
-    giornate: 2,
-    quotaCoop: 40,
-    contributi: 58.7,
-    bustaPaga: 12,
-    netto: 289.3,
-    fatturato: 400,
-  });
+  const [esente, setEsente] = useState(false);
+  const [valoreInput, setValoreInput] = useState(400);
+  const [pop, setPop] = useState(false);
+  const [dati, setDati] = useState<CalcoloResult>(calcolaDiretto(400, false));
 
   useEffect(() => {
     const scenari = [
@@ -134,23 +135,26 @@ export function TeaserCalcolatore() {
     let index = 0;
     const interval = setInterval(() => {
       index = (index + 1) % scenari.length;
-      const target = scenari[index];
-      setModalita(target.modalita);
-      setEsente(target.esente);
-      setValoreInput(target.valore);
+      const t = scenari[index];
+      setModalita(t.modalita);
+      setEsente(t.esente);
+      setValoreInput(t.valore);
     }, 3500);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (modalita === "diretta") {
-      setDatiCalcolati(calcolaDiretto(valoreInput, esente));
-    } else {
-      setDatiCalcolati(calcolaInverso(valoreInput, esente));
-    }
+    setDati(
+      modalita === "diretta"
+        ? calcolaDiretto(valoreInput, esente)
+        : calcolaInverso(valoreInput, esente)
+    );
+    setPop(true);
+    const t = setTimeout(() => setPop(false), 200);
+    return () => clearTimeout(t);
   }, [modalita, esente, valoreInput]);
 
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
   const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
   const buttonX = useSpring(0, springConfig);
   const buttonY = useSpring(0, springConfig);
@@ -158,10 +162,8 @@ export function TeaserCalcolatore() {
   const handleMagneticMove = (e: React.MouseEvent) => {
     const rect = buttonRef.current?.getBoundingClientRect();
     if (!rect) return;
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.3;
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
-    buttonX.set(x);
-    buttonY.set(y);
+    buttonX.set((e.clientX - rect.left - rect.width / 2) * 0.3);
+    buttonY.set((e.clientY - rect.top - rect.height / 2) * 0.3);
   };
   const handleMagneticLeave = () => {
     buttonX.set(0);
@@ -169,23 +171,18 @@ export function TeaserCalcolatore() {
   };
 
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
-  const handleRipple = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRipple = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
     const id = Date.now();
-    setRipples((prev) => [...prev, { id, x, y }]);
+    setRipples((prev) => [...prev, { id, x: e.clientX - rect.left, y: e.clientY - rect.top }]);
     setTimeout(() => setRipples((prev) => prev.filter((r) => r.id !== id)), 600);
   };
 
-  const [isBouncing, setIsBouncing] = useState(false);
-  const handleBounce = () => {
-    setIsBouncing(true);
-    setTimeout(() => setIsBouncing(false), 400);
-  };
+  const cifra = modalita === "diretta" ? dati.netto : dati.fatturato;
 
   return (
     <section className="relative w-full min-h-screen bg-[#0A0A0A] text-[#F2EDE4] overflow-hidden flex items-center justify-center">
+      {/* SFONDO */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none">
         <img
           src="/DJ_playing_music_in_club_202607131913.jpeg"
@@ -205,7 +202,6 @@ export function TeaserCalcolatore() {
           titleComponent={
             <div className="max-w-3xl mx-auto mb-4 text-center px-4">
               <div className="flex items-center justify-center mb-4">
-                {/* EYEBROW — allineato a text-[11px] come le altre sezioni */}
                 <span className="font-sans text-[#E0A96D]/60 text-[11px] tracking-[0.3em] uppercase font-medium">IL CALCOLATORE</span>
               </div>
               <h2 className="text-[clamp(2.2rem,4.5vw,4rem)] text-[#F2EDE4] leading-[1.08] tracking-tight">
@@ -217,15 +213,14 @@ export function TeaserCalcolatore() {
               </p>
               <div className="flex justify-center mt-8">
                 <div className="relative group">
-                  <motion.button
+                  <motion.a
                     ref={buttonRef}
+                    href="/calcolatore"
                     onMouseMove={handleMagneticMove}
                     onMouseLeave={handleMagneticLeave}
-                    onClick={(e) => { handleRipple(e); handleBounce(); }}
-                    animate={isBouncing ? { scale: [1, 0.95, 1.05, 1] } : { scale: 1 }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                    onClick={handleRipple}
+                    style={{ x: buttonX, y: buttonY }}
                     className="relative flex items-center gap-4 px-8 py-4 bg-[#F2EDE4] rounded-full overflow-hidden glow-pulse transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.5)] hover:scale-[1.02] cursor-pointer select-none text-black"
-                    style={{ transform: `translate(${buttonX.get()}px, ${buttonY.get()}px)` }}
                   >
                     <div className="absolute inset-0 rounded-full pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%)", border: "1px solid rgba(255,255,255,0.2)" }} />
                     <div className="absolute top-0 left-[10%] right-[10%] h-[45%] rounded-t-full pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%)" }} />
@@ -238,79 +233,112 @@ export function TeaserCalcolatore() {
                         <motion.span key={ripple.id} className="absolute rounded-full bg-amber-400/30 pointer-events-none" style={{ left: ripple.x - 50, top: ripple.y - 50, width: 100, height: 100 }} initial={{ scale: 0, opacity: 1 }} animate={{ scale: 3, opacity: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} />
                       ))}
                     </AnimatePresence>
-                  </motion.button>
+                  </motion.a>
                 </div>
               </div>
             </div>
           }
         >
-          <div className="w-full h-full bg-gradient-to-br from-[#121212] to-[#0a0a0a] backdrop-blur-2xl p-6 md:p-8 flex flex-col justify-between text-white font-sans relative border border-white/5 select-none pointer-events-none overflow-hidden rounded-3xl">
-            <div className="absolute -top-32 -right-32 w-64 h-64 bg-[#E0A96D]/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-[#E0A96D]/5 rounded-full blur-3xl pointer-events-none" />
+          {/* ============================================================
+              CALCOLATORE — design identico a public/calcolatore/index.html
+              ============================================================ */}
+          <Link
+            href="/calcolatore"
+            aria-label="Apri il calcolatore"
+            className="flex w-full items-center justify-center bg-[#0A0A0A]/60 px-4 py-10 md:py-14"
+          >
+            <div
+              className="relative w-full max-w-[550px] overflow-hidden rounded-[20px] md:rounded-[30px] border border-white/5 px-5 py-8 md:p-8 select-none font-sans shadow-[0_30px_60px_rgba(0,0,0,0.6),inset_0_0_0_1px_rgba(255,255,255,0.03)]"
+              style={{ background: "linear-gradient(145deg,#121212,#0a0a0a)" }}
+            >
+              {/* alone */}
+              <div className="pointer-events-none absolute -top-24 -right-24 h-[200px] w-[200px] rounded-full bg-[#E0A96D] opacity-[0.03] blur-[40px]" />
 
-            <div className="flex items-center justify-between relative z-10">
-              <div className="flex items-center gap-3">
-                <img src="/IMG_7418.PNG" alt="Off Stage Logo" className="h-11 w-auto object-contain brightness-100 drop-shadow-[0_0_12px_rgba(224,169,109,0.15)]" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+              {/* LOGO */}
+              <div className="mb-5 flex items-center justify-center">
+                <img
+                  src="/IMG_7418.PNG"
+                  alt="Off Stage"
+                  className="h-[90px] md:h-[140px] w-auto object-contain drop-shadow-[0_0_12px_rgba(224,169,109,0.3)]"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                />
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#E0A96D] animate-pulse" />
-                <span className="text-[9px] text-[#F2EDE4]/40 font-mono tracking-wider uppercase">Demo Live</span>
-              </div>
-            </div>
 
-            <div className="flex-1 flex flex-col justify-center gap-5 relative z-10 py-6">
-              <div className="w-full max-w-xs mx-auto p-1 bg-white/5 rounded-xl border border-white/5">
-                <div className="grid grid-cols-2 gap-0.5 relative">
-                  <div className={`py-2 text-center text-[10px] uppercase tracking-wider font-semibold rounded-lg transition-all duration-500 ${modalita === "diretta" ? "bg-[#F2EDE4] text-black shadow-sm" : "text-white/30"}`}>So quanto fatturo</div>
-                  <div className={`py-2 text-center text-[10px] uppercase tracking-wider font-semibold rounded-lg transition-all duration-500 ${modalita === "inversa" ? "bg-[#F2EDE4] text-black shadow-sm" : "text-white/30"}`}>So quanto voglio netto</div>
+              {/* MODE TOGGLE */}
+              <div className="mb-4 grid grid-cols-2 items-stretch gap-1.5 rounded-2xl border border-white/5 bg-white/[0.03] p-1.5">
+                <div className={`flex items-center justify-center rounded-xl px-2.5 py-3 md:py-4 text-center text-[11px] md:text-sm font-semibold uppercase tracking-[0.1em] transition-all duration-500 ${modalita === "diretta" ? "bg-[#F2EDE4] text-black shadow-[0_2px_8px_rgba(0,0,0,0.3)]" : "text-white/30"}`}>
+                  So quanto fatturo
+                </div>
+                <div className={`flex items-center justify-center rounded-xl px-2.5 py-3 md:py-4 text-center text-[11px] md:text-sm font-semibold uppercase tracking-[0.1em] transition-all duration-500 ${modalita === "inversa" ? "bg-[#F2EDE4] text-black shadow-[0_2px_8px_rgba(0,0,0,0.3)]" : "text-white/30"}`}>
+                  So quanto voglio netto
                 </div>
               </div>
 
-              <div className="flex items-center justify-between max-w-xs mx-auto w-full px-2">
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-semibold text-white/90">Esenzione Contributiva</span>
-                  <span className="text-[10px] text-white/40">{esente ? "Dipendente (6,60€/g)" : "Autonomo (29,35€/g)"}</span>
+              {/* ESENZIONE */}
+              <div className="mb-4 flex items-center justify-between px-1.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-sm md:text-base font-semibold text-[#F2EDE4]/90">Esenzione contributiva</span>
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-xs font-semibold text-white/50">i</span>
                 </div>
-                <div className="w-10 h-6 bg-white/5 rounded-full p-0.5 flex items-center transition-all duration-500 border border-white/10" style={{ justifyContent: esente ? "flex-start" : "flex-end" }}>
-                  <motion.div layout className={`w-5 h-5 rounded-full shadow-md ${esente ? "bg-white/40" : "bg-[#E0A96D]"}`} />
+                <div className={`flex h-[26px] md:h-[30px] w-[46px] md:w-[54px] items-center rounded-full border p-0.5 transition-colors duration-500 ${esente ? "border-[#E0A96D]/30 bg-[#E0A96D]/20" : "border-white/10 bg-white/5"}`}>
+                  <span className={`h-[22px] w-[22px] md:h-[26px] md:w-[26px] rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.2)] transition-transform duration-500 ${esente ? "translate-x-5 md:translate-x-6 bg-[#E0A96D]" : "translate-x-0 bg-white"}`} />
                 </div>
               </div>
 
-              <div className="max-w-xs mx-auto w-full">
-                <div className="flex items-center justify-between px-4 py-3 bg-white/5 rounded-xl border border-white/5 transition-all duration-300">
-                  <span className="text-[9px] text-[#F2EDE4]/30 font-mono tracking-widest uppercase">{modalita === "diretta" ? "FATTURATO LORDO" : "NETTO DESIDERATO"}</span>
+              {/* INPUT */}
+              <div className="mb-5">
+                <span className="mb-2 block text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#F2EDE4]/30">
+                  {modalita === "diretta" ? "Fatturato lordo" : "Netto desiderato"}
+                </span>
+                <div className="relative flex items-center rounded-2xl border border-white/[0.08] bg-white/[0.03] py-4 md:py-5 pl-11 md:pl-14 pr-5 md:pr-6">
+                  <span className="pointer-events-none absolute left-[18px] md:left-6 text-[1.3rem] md:text-2xl font-light text-[#F2EDE4]/40">€</span>
                   <AnimatePresence mode="wait">
-                    <motion.span key={valoreInput} initial={{ y: 5, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -5, opacity: 0 }} transition={{ duration: 0.2 }} className="text-lg font-light text-[#F2EDE4] font-mono">€ {valoreInput.toFixed(2)}</motion.span>
+                    <motion.span
+                      key={valoreInput}
+                      initial={{ y: 5, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: -5, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-[1.3rem] md:text-[1.6rem] font-light text-[#F2EDE4]"
+                    >
+                      {valoreInput}
+                    </motion.span>
                   </AnimatePresence>
                 </div>
               </div>
 
-              <div className="max-w-sm mx-auto w-full bg-white/[0.02] backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-[0_24px_50px_-12px_rgba(0,0,0,0.6)] relative overflow-hidden">
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#E0A96D]/5 rounded-full blur-2xl pointer-events-none" />
-                <div className="relative z-10 text-left">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[9px] text-[#F2EDE4]/30 tracking-[0.15em] uppercase font-semibold">{modalita === "diretta" ? "Netto finale in tasca" : "Fattura da emettere"}</span>
-                    <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#E0A96D]/10 border border-[#E0A96D]/20">
-                      <Layers className="w-2.5 h-2.5 text-[#E0A96D]" />
-                      <span className="text-[8px] text-[#E0A96D] font-mono font-medium uppercase tracking-wider">{datiCalcolati.giornate} {datiCalcolati.giornate === 1 ? "giornata" : "giornate"}</span>
+              {/* RESULT BOX */}
+              <div className="relative rounded-3xl border border-white/[0.08] bg-white/[0.02] p-6 md:p-10 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+                <div className="pointer-events-none absolute -top-10 -right-10 h-[140px] w-[140px] rounded-full bg-[#E0A96D] opacity-[0.05] blur-[30px]" />
+
+                <div className="relative z-10 mb-5 flex items-center justify-between gap-3">
+                  <span className="text-[10px] md:text-xs uppercase tracking-[0.15em] text-[#F2EDE4]/30">
+                    {modalita === "diretta" ? "Netto finale in tasca" : "Fattura da emettere"}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 rounded-full border border-[#E0A96D]/20 bg-[#E0A96D]/10 px-3.5 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium uppercase tracking-[0.1em] text-[#E0A96D]">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <line x1="3" y1="9" x2="21" y2="9" />
+                        <line x1="9" y1="3" x2="9" y2="21" />
+                      </svg>
+                      <span>{dati.giornate} {dati.giornate === 1 ? "giornata" : "giornate"}</span>
                     </div>
-                  </div>
-                  <div className="flex items-baseline gap-1 mb-5">
-                    <span className="text-sm text-[#F2EDE4]/40 font-light mr-1">≈</span>
-                    <AnimatePresence mode="wait">
-                      <motion.span key={modalita === "diretta" ? datiCalcolati.netto : datiCalcolati.fatturato} initial={{ opacity: 0, filter: "blur(2px)" }} animate={{ opacity: 1, filter: "blur(0px)" }} exit={{ opacity: 0, filter: "blur(2px)" }} transition={{ duration: 0.2 }} className="text-4xl md:text-5xl font-semibold text-[#F2EDE4] tracking-tight leading-none">€ {(modalita === "diretta" ? datiCalcolati.netto : datiCalcolati.fatturato).toFixed(2)}</motion.span>
-                    </AnimatePresence>
-                  </div>
-                  <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/5 text-left">
-                    <div><p className="text-[8px] text-[#F2EDE4]/30 uppercase tracking-wider font-semibold">Contributi</p><AnimatePresence mode="wait"><motion.p key={datiCalcolati.contributi} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[#F2EDE4]/80 text-xs font-mono mt-1">-€ {datiCalcolati.contributi.toFixed(2)}</motion.p></AnimatePresence></div>
-                    <div><p className="text-[8px] text-[#F2EDE4]/30 uppercase tracking-wider font-semibold">Quota Coop</p><AnimatePresence mode="wait"><motion.p key={datiCalcolati.quotaCoop} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[#F2EDE4]/80 text-xs font-mono mt-1">-€ {datiCalcolati.quotaCoop.toFixed(2)}</motion.p></AnimatePresence></div>
-                    <div><p className="text-[8px] text-[#F2EDE4]/30 uppercase tracking-wider font-semibold">Busta Paga</p><p className="text-[#F2EDE4]/80 text-xs font-mono mt-1">-€ 12.00</p></div>
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-xs font-semibold text-white/50">i</span>
                   </div>
                 </div>
+
+                <div className={`relative z-10 text-[2.5rem] md:text-[4rem] font-semibold leading-none tracking-[-0.02em] text-[#F2EDE4] transition-transform duration-200 ${pop ? "scale-[1.06]" : "scale-100"}`}>
+                  <span className="mr-1.5 text-[1.4rem] md:text-[1.8rem] font-light text-[#F2EDE4]/40">≈</span>
+                  {fmt(cifra)}
+                </div>
               </div>
-              <p className="text-center text-[9px] text-[#F2EDE4]/30 font-light tracking-wide max-w-sm mx-auto leading-relaxed">Stima indicativa (IRPEF esclusa). <span className="text-[#E0A96D] font-medium">Nota:</span> registrando le tue spese e fatture d'acquisto professionali, il tuo netto finale reale sarà ancora più alto.</p>
+
+              <p className="mt-6 text-center text-xs md:text-[15px] leading-relaxed text-[#F2EDE4]/70">
+                Stima indicativa (IRPEF esclusa).
+              </p>
             </div>
-          </div>
+          </Link>
         </ContainerScroll>
       </div>
     </section>

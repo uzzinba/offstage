@@ -2,13 +2,14 @@
 
 import { useRef, useEffect, useState } from "react"
 import { motion, useInView, Variants } from "framer-motion"
-import { ArrowRight, MessageCircle } from "lucide-react"
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export function CTAFinale() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
 
-  // Bagliore che pulsa
   const [glowIntensity, setGlowIntensity] = useState(0.3)
 
   useEffect(() => {
@@ -132,20 +133,27 @@ export function CTAFinale() {
             </p>
           </motion.div>
 
-          {/* CTA DOPPI */}
+          {/* CTA DOPPI — ENTRAMBI PORTANO A /CONTATTI */}
           <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center gap-4 mt-4"
           >
-            <button className="group relative flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] hover:scale-[1.02] font-sans font-medium text-sm tracking-[0.15em] uppercase cursor-pointer select-none">
-              <span className="relative z-10">Contattaci</span>
+            {/* Pulsante primario — SCOPRI DI PIÙ → /contatti */}
+            <Link
+              href="/contatti"
+              className="group relative flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] hover:scale-[1.02] font-sans font-medium text-sm tracking-[0.15em] uppercase cursor-pointer select-none"
+            >
+              <span className="relative z-10">SCOPRI DI PIÙ</span>
               <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
 
-            <button className="group relative flex items-center gap-3 px-8 py-4 bg-transparent border border-[#F2EDE4]/30 text-[#F2EDE4] rounded-full overflow-hidden transition-all duration-300 hover:border-[#E0A96D] hover:text-[#E0A96D] hover:shadow-[0_0_30px_rgba(224,169,109,0.15)] font-sans font-light text-sm tracking-[0.15em] uppercase cursor-pointer select-none">
-              <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-              <span className="relative z-10">Scrivici su WhatsApp</span>
-            </button>
+            {/* Pulsante secondario — CONTATTACI → /contatti */}
+            <Link
+              href="/contatti"
+              className="group relative flex items-center gap-3 px-8 py-4 bg-transparent border border-[#F2EDE4]/30 text-[#F2EDE4] rounded-full overflow-hidden transition-all duration-300 hover:border-[#E0A96D] hover:text-[#E0A96D] hover:shadow-[0_0_30px_rgba(224,169,109,0.15)] font-sans font-light text-sm tracking-[0.15em] uppercase cursor-pointer select-none"
+            >
+              <span className="relative z-10">CONTATTACI</span>
+            </Link>
           </motion.div>
 
           <motion.p

@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react"
 import { motion, useInView, useSpring, useTransform, Variants } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const steps = [
   {
@@ -29,6 +30,7 @@ const steps = [
 export function ComeFunziona() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.15 })
+  const router = useRouter()
 
   const [priceCount, setPriceCount] = useState(0)
   const priceRef = useRef<HTMLDivElement>(null)
@@ -164,10 +166,12 @@ export function ComeFunziona() {
             </motion.p>
           </div>
 
-          {/* TIMELINE VERTICALE */}
+          {/* TIMELINE VERTICALE — CON RIQUADRI PIÙ SOLIDI */}
           <div className="relative max-w-3xl mx-auto w-full pt-8 pb-4">
+            {/* Linea di sfondo */}
             <div className="absolute left-[30px] top-0 bottom-0 w-[3px] bg-[#F2EDE4]/10 rounded-full" />
 
+            {/* Linea di luce che si riempie */}
             <motion.div
               className="absolute left-[30px] top-0 w-[3px] bg-[#E0A96D] rounded-full shadow-[0_0_20px_rgba(224,169,109,0.4)]"
               style={{
@@ -177,6 +181,7 @@ export function ComeFunziona() {
               transition={{ duration: 0.3 }}
             />
 
+            {/* Glow sulla linea */}
             <motion.div
               className="absolute left-[30px] top-0 w-[12px] -translate-x-1/2 rounded-full blur-xl"
               style={{
@@ -197,10 +202,11 @@ export function ComeFunziona() {
                   key={index}
                   ref={stepRef}
                   variants={itemVariants}
-                  className={`relative flex items-start gap-8 mb-16 last:mb-0 ${
+                  className={`relative flex items-start gap-8 mb-12 last:mb-0 ${
                     index === 0 ? "" : "pt-4"
                   }`}
                 >
+                  {/* PALLINO INDICATORE */}
                   <motion.div
                     className="relative z-10 w-3 h-3 rounded-full bg-[#0A0A0A] border-2 transition-colors duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
                     style={{
@@ -211,6 +217,7 @@ export function ComeFunziona() {
                     }}
                   />
 
+                  {/* CONTENUTO DELLO STEP — CON RIQUADRO */}
                   <motion.div
                     className="flex-1 pt-1"
                     initial={{ opacity: 0, x: 20 }}
@@ -220,36 +227,54 @@ export function ComeFunziona() {
                     }}
                     transition={{ duration: 0.5 }}
                   >
-                    <span
-                      className="font-serif italic font-black text-7xl md:text-8xl leading-none tracking-tight transition-colors duration-700"
+                    <div
+                      className={`p-6 md:p-8 rounded-2xl border transition-all duration-500 ${
+                        stepProgress > 0.5
+                          ? "border-[#E0A96D]/20 bg-white/5 shadow-[0_8px_30px_rgba(224,169,109,0.05)]"
+                          : "border-white/5 bg-white/3"
+                      }`}
                       style={{
-                        color: stepProgress > 0.7
-                          ? "#E0A96D"
-                          : stepProgress > 0.3
-                            ? "#F2EDE4/60"
-                            : "#F2EDE4/20",
-                        opacity: stepProgress > 0.1 ? 1 : 0.3,
+                        background: stepProgress > 0.5
+                          ? "linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)"
+                          : "rgba(255,255,255,0.02)",
                       }}
                     >
-                      {step.number}
-                    </span>
+                      {/* NUMERO GRANDE — SERIF ITALIC */}
+                      <span
+                        className="font-serif italic font-black text-6xl md:text-7xl leading-none tracking-tight transition-colors duration-700 block mb-2"
+                        style={{
+                          color: stepProgress > 0.7
+                            ? "#E0A96D"
+                            : stepProgress > 0.3
+                              ? "#F2EDE4/60"
+                              : "#F2EDE4/20",
+                          opacity: stepProgress > 0.1 ? 1 : 0.3,
+                        }}
+                      >
+                        {step.number}
+                      </span>
 
-                    <h3 className="font-sans font-bold text-[#F2EDE4] text-2xl mt-2">
-                      {step.title}
-                    </h3>
+                      <h3 className="font-sans font-bold text-[#F2EDE4] text-xl md:text-2xl mt-2">
+                        {step.title}
+                      </h3>
 
-                    <p className="font-sans font-light text-[#F2EDE4]/70 text-sm md:text-base mt-1 max-w-[40ch] leading-relaxed">
-                      {step.description}
-                    </p>
+                      <p className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base mt-2 max-w-[40ch] leading-relaxed">
+                        {step.description}
+                      </p>
 
-                    <Link
-                      href={`/approfondisci/${step.slug}`}
-                      className="inline-flex items-center gap-1 text-[#E0A96D] text-sm font-medium mt-3 hover:underline transition-colors"
-                    >
-                      Approfondisci
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+                      {/* ============================================================
+                          LINK "APPROFONDISCI" → /faq
+                          ============================================================ */}
+                      <Link
+                        href="/faq"
+                        className="inline-flex items-center gap-1 text-[#E0A96D] text-sm font-medium mt-4 hover:underline transition-colors"
+                      >
+                        Approfondisci
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
 
+                    {/* Linea decorativa sotto ogni step */}
                     <motion.div
                       className="w-16 h-0.5 rounded-full mt-4 transition-colors duration-700"
                       style={{
@@ -264,9 +289,7 @@ export function ComeFunziona() {
             })}
           </div>
 
-          {/* ============================================================
-              BLOCCO PREZZO — DEFINITIVO (PLUG-AND-PLAY)
-              ============================================================ */}
+          {/* BLOCCO PREZZO */}
           <motion.div
             ref={priceRef}
             variants={itemVariants}
@@ -327,7 +350,8 @@ export function ComeFunziona() {
                     ref={buttonRef}
                     onMouseMove={handleMagneticMove}
                     onMouseLeave={handleMagneticLeave}
-                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] font-sans font-medium text-sm tracking-[0.15em] uppercase"
+                    onClick={() => router.push("/calcolatore")}
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] hover:scale-[1.02] font-sans font-medium text-sm tracking-[0.15em] uppercase cursor-pointer"
                     style={{
                       transform: `translate(${buttonX.get()}px, ${buttonY.get()}px)`,
                     }}

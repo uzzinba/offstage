@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 const links = [
   { label: "Home", href: "/" },
@@ -12,7 +13,8 @@ const links = [
 ]
 
 export function Navbar() {
-  const [active, setActive] = useState("Home")
+  const pathname = usePathname()
+  const nascondi = pathname === "/calcolatore"
   const [scrolled, setScrolled] = useState(false)
   const [mouseX, setMouseX] = useState<number | null>(null)
   const [isVisible, setIsVisible] = useState(true)
@@ -67,6 +69,8 @@ export function Navbar() {
     setMouseX(null)
   }
 
+  if (nascondi) return null
+
   return (
     <header
       className={`fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none transition-all duration-500 ${
@@ -89,9 +93,9 @@ export function Navbar() {
       >
         {mouseX !== null && (
           <div
-            className="absolute top-0 bottom-0 w-[200px] pointer-events-none hidden md:block"
+            className="absolute top-0 bottom-0 w-[50px] pointer-events-none hidden md:block"
             style={{
-              left: mouseX - 100,
+              left: mouseX - 30,
               background:
                 "radial-gradient(ellipse 100% 100% at 50% 50%, rgba(224,169,109,0.12) 0%, transparent 70%)",
             }}
@@ -106,7 +110,7 @@ export function Navbar() {
 
         <ul className="hidden md:flex items-center gap-8 relative z-10">
           {links.map((link) => {
-            const isActive = active === link.label
+            const isActive = pathname === link.href
             return (
               <li key={link.label} className="relative">
                 {isActive && (
@@ -123,7 +127,6 @@ export function Navbar() {
                 )}
                 <Link
                   href={link.href}
-                  onClick={() => setActive(link.label)}
                   className={`relative text-[11px] tracking-[0.18em] uppercase font-medium transition-colors duration-300 ${
                     isActive
                       ? "text-[#F2EDE4]"
@@ -149,15 +152,12 @@ export function Navbar() {
           <div className="md:hidden absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[calc(100vw-2rem)] max-w-sm p-6 rounded-2xl border border-white/10 bg-[#0A0A0A]/95 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] max-h-[80vh] overflow-y-auto">
             <ul className="flex flex-col items-center gap-6">
               {links.map((link) => {
-                const isActive = active === link.label
+                const isActive = pathname === link.href
                 return (
                   <li key={link.label} className="w-full">
                     <Link
                       href={link.href}
-                      onClick={() => {
-                        setActive(link.label)
-                        setIsMenuOpen(false)
-                      }}
+                      onClick={() => setIsMenuOpen(false)}
                       className={`block w-full text-center text-[15px] tracking-[0.15em] uppercase font-medium transition-colors duration-300 py-2 px-4 rounded-lg break-words ${
                         isActive
                           ? "text-[#F2EDE4] bg-[#E0A96D]/10"

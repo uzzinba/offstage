@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { MessageCircle, Mail, Phone } from "lucide-react"
+import { Mail } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -30,7 +30,7 @@ export function Footer() {
               {[
                 { label: "Home", href: "/" },
                 { label: "Calcolatore", href: "/calcolatore" },
-                { label: "Esenzione", href: "/esenzione" },
+                { label: "FAQ", href: "/faq" }, // ← Aggiornato da "Esenzione" a "FAQ"
                 { label: "Contatti", href: "/contatti" },
               ].map((link) => (
                 <li key={link.label}>
@@ -45,22 +45,13 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COLONNA 3 — CONTATTI IN COLONNA VERTICALE */}
+          {/* COLONNA 3 — CONTATTI (Solo Email) */}
           <div className="md:col-span-5">
             <span className="font-sans text-[#F2EDE4]/20 text-[10px] tracking-[0.2em] uppercase font-medium">
               Contatti
             </span>
 
             <div className="mt-3 flex flex-col gap-3">
-              {/* WhatsApp */}
-              <a
-                href="#"
-                className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
-              >
-                <MessageCircle className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
-                <span className="text-sm">Scrivici su WhatsApp</span>
-              </a>
-
               {/* Email — SEDE PRINCIPALE */}
               <a
                 href="mailto:offstagecoop.nicole@gmail.com"
@@ -69,12 +60,6 @@ export function Footer() {
                 <Mail className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
                 <span className="text-sm">offstagecoop.nicole@gmail.com</span>
               </a>
-
-              {/* Telefono / Ufficio Milano */}
-              <div className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4]/50 text-sm">
-                <Phone className="w-5 h-5 text-[#E0A96D]" />
-                <span>+39 02 1234567 — Milano</span>
-              </div>
             </div>
           </div>
         </div>

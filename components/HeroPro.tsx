@@ -10,8 +10,10 @@ import {
 } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import ParticlesBackground from "./Particles"
+import { useRouter } from "next/navigation"
 
 export function HeroPro() {
+  const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -104,20 +106,13 @@ export function HeroPro() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/40 via-transparent to-transparent z-[1]" />
       </div>
 
-      {/* PARTICELLE */}
       <div className="absolute inset-0 z-[1] pointer-events-none">
         <ParticlesBackground />
       </div>
 
-      {/* LUCI DA PALCO */}
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 z-[1] w-[600px] h-[600px] bg-amber-500/10 rounded-full blur-[200px] mix-blend-screen" />
       <div className="absolute bottom-1/3 right-1/3 z-[1] w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[150px] mix-blend-screen" />
 
-      {/* ============================================================
-          SCRITTA "OFF STAGE" — RIMOSSA (era qui)
-          ============================================================ */}
-
-      {/* CONTENUTO PRINCIPALE */}
       <div className="relative z-10 h-full flex items-center" style={{ perspective: "1000px" }}>
         <motion.div
           className="max-w-7xl mx-auto w-full px-4 md:px-8"
@@ -161,6 +156,7 @@ export function HeroPro() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
+              {/* Pulsante SCOPRI DI PIÙ → /contatti */}
               <div className="relative group">
                 <motion.button
                   ref={buttonRef}
@@ -169,10 +165,11 @@ export function HeroPro() {
                   onClick={(e) => {
                     handleRipple(e)
                     handleBounce()
+                    router.push("/contatti")
                   }}
                   animate={isBouncing ? { scale: [1, 0.95, 1.05, 1] } : { scale: 1 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="relative flex items-center gap-4 px-8 py-4 bg-[#F2EDE4] rounded-full overflow-hidden glow-pulse transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.5)] hover:scale-[1.02] cursor-pointer select-none"
+                  className="relative flex items-center gap-4 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden glow-pulse transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.5)] hover:scale-[1.02] cursor-pointer select-none"
                   style={{
                     transform: `translate(${buttonX.get()}px, ${buttonY.get()}px)`,
                   }}
@@ -220,8 +217,12 @@ export function HeroPro() {
                 </motion.button>
               </div>
 
+              {/* Pulsante CONTATTACI → /contatti */}
               <div className="relative group">
-                <button className="relative flex items-center justify-center px-8 py-4 bg-transparent border border-[#F2EDE4]/30 rounded-full overflow-hidden transition-all duration-300 hover:border-[#E0A96D] hover:text-[#E0A96D] hover:shadow-[0_0_30px_rgba(224,169,109,0.25)] text-[#F2EDE4] text-xs tracking-widest uppercase font-medium cursor-pointer select-none">
+                <button
+                  onClick={() => router.push("/contatti")}
+                  className="relative flex items-center justify-center px-8 py-4 bg-transparent border border-[#F2EDE4]/30 rounded-full overflow-hidden transition-all duration-300 hover:border-[#E0A96D] hover:text-[#E0A96D] hover:shadow-[0_0_30px_rgba(224,169,109,0.25)] text-[#F2EDE4] text-xs tracking-widest uppercase font-medium cursor-pointer select-none"
+                >
                   <div
                     className="absolute inset-0 rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{
