@@ -49,11 +49,8 @@ export function CTAFinale() {
       ref={ref}
       className="relative w-full min-h-[70vh] md:min-h-[60vh] flex items-center justify-center overflow-hidden bg-[#0A0A0A]"
     >
-      {/* ============================================================
-          SFONDO — BUIO CALDO CON BAGLIORE PULSANTE
-          ============================================================ */}
+      {/* SFONDO — BUIO CALDO CON BAGLIORE PULSANTE */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Gradiente radiale che simula le luci da palco che si spengono */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full blur-[160px] transition-opacity duration-1000"
           style={{
@@ -61,7 +58,6 @@ export function CTAFinale() {
           }}
         />
 
-        {/* Secondo bagliore più ampio e sottile */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[400px] rounded-full blur-[200px] transition-opacity duration-1000"
           style={{
@@ -69,7 +65,6 @@ export function CTAFinale() {
           }}
         />
 
-        {/* Particelle sottili (polvere di palco) */}
         <div className="absolute inset-0 overflow-hidden">
           {[...Array(20)].map((_, i) => {
             const size = 1 + Math.random() * 3
@@ -95,7 +90,6 @@ export function CTAFinale() {
           })}
         </div>
 
-        {/* Gradiente di chiusura verso il footer */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0A0A0A] to-transparent" />
       </div>
 
@@ -108,9 +102,7 @@ export function CTAFinale() {
         }
       `}</style>
 
-      {/* ============================================================
-          CONTENUTO — PULITO, FOCALIZZATO
-          ============================================================ */}
+      {/* CONTENUTO */}
       <div className="relative z-10 max-w-4xl mx-auto w-full px-6 md:px-12 text-center">
         <motion.div
           variants={containerVariants}
@@ -118,9 +110,9 @@ export function CTAFinale() {
           animate={isInView ? "visible" : "hidden"}
           className="flex flex-col items-center gap-8 md:gap-10"
         >
-          {/* TITOLO — richiama l'hero, chiude il cerchio */}
+          {/* TITOLO */}
           <motion.div variants={itemVariants} className="space-y-3">
-            <span className="font-sans text-[#E0A96D]/40 text-xs tracking-[0.3em] uppercase font-medium">
+            <span className="font-sans text-[#E0A96D]/40 text-[11px] tracking-[0.3em] uppercase font-medium">
               Pronto a suonare?
             </span>
 
@@ -140,25 +132,22 @@ export function CTAFinale() {
             </p>
           </motion.div>
 
-          {/* CTA DOPPI — identici alla Hero */}
+          {/* CTA DOPPI */}
           <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center gap-4 mt-4"
           >
-            {/* Pulsante primario — Contattaci */}
             <button className="group relative flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] hover:scale-[1.02] font-sans font-medium text-sm tracking-[0.15em] uppercase cursor-pointer select-none">
               <span className="relative z-10">Contattaci</span>
               <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
             </button>
 
-            {/* Pulsante secondario — WhatsApp */}
             <button className="group relative flex items-center gap-3 px-8 py-4 bg-transparent border border-[#F2EDE4]/30 text-[#F2EDE4] rounded-full overflow-hidden transition-all duration-300 hover:border-[#E0A96D] hover:text-[#E0A96D] hover:shadow-[0_0_30px_rgba(224,169,109,0.15)] font-sans font-light text-sm tracking-[0.15em] uppercase cursor-pointer select-none">
               <MessageCircle className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
               <span className="relative z-10">Scrivici su WhatsApp</span>
             </button>
           </motion.div>
 
-          {/* Piccolo payoff emotivo — quasi invisibile, ma rassicurante */}
           <motion.p
             variants={itemVariants}
             className="font-sans text-[#F2EDE4]/15 text-[10px] tracking-[0.2em] uppercase mt-2"

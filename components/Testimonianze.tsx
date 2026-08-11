@@ -1,62 +1,42 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import { motion, useInView, Variants } from "framer-motion"
 
 const testimonianze = [
-  {
-    id: 1,
-    citazione: "Prima passavo ore a compilare moduli e ricordare scadenze. Ora mando un messaggio e suono. Fine.",
-    nome: "Marco",
-  },
-  {
-    id: 2,
-    citazione: "L'agibilità era un incubo. Ogni data era ansia. Da quando ci pensano loro, ho smesso di preoccuparmi.",
-    nome: "Sara",
-  },
-  {
-    id: 3,
-    citazione: "Non sapevo cosa fosse la Certificazione Unica. Ora la ricevo puntuale e non devo pensarci io.",
-    nome: "Luca",
-  },
-  {
-    id: 4,
-    citazione: "L'IVA era un rebus. Ora la recuperano loro. Io faccio solo musica, e funziona.",
-    nome: "Elena",
-  },
-  {
-    id: 5,
-    citazione: "Aprire una pratica INPS mi faceva venire l'ansia. Ora la apro in due minuti e nessuno mi rompe.",
-    nome: "Paolo",
-  },
-  {
-    id: 6,
-    citazione: "Le scadenze mi mangiavano la testa. Ora non so nemmeno quando cadono — e va benissimo così.",
-    nome: "Giulia",
-  },
-  {
-    id: 7,
-    citazione: "Ero terrorizzata dai controlli. Ora so che se arriva qualcosa, ci sono loro al mio fianco.",
-    nome: "Anna",
-  },
-  {
-    id: 8,
-    citazione: "Fatturare era una tortura. Ora lo fanno loro in 5 minuti. Io penso solo agli accordi.",
-    nome: "Davide",
-  },
+  { id: 1, citazione: "Prima passavo ore a compilare moduli e ricordare scadenze. Ora mando un messaggio e suono. Fine.", nome: "Marco" },
+  { id: 2, citazione: "L'agibilità era un incubo. Ogni data era ansia. Da quando ci pensano loro, ho smesso di preoccuparmi.", nome: "Sara" },
+  { id: 3, citazione: "Non sapevo cosa fosse la Certificazione Unica. Ora la ricevo puntuale e non devo pensarci io.", nome: "Luca" },
+  { id: 4, citazione: "L'IVA era un rebus. Ora la recuperano loro. Io faccio solo musica, e funziona.", nome: "Elena" },
+  { id: 5, citazione: "Aprire una pratica INPS mi faceva venire l'ansia. Ora la apro in due minuti e nessuno mi rompe.", nome: "Paolo" },
+  { id: 6, citazione: "Le scadenze mi mangiavano la testa. Ora non so nemmeno quando cadono — e va benissimo così.", nome: "Giulia" },
+  { id: 7, citazione: "Ero terrorizzata dai controlli. Ora so che se arriva qualcosa, ci sono loro al mio fianco.", nome: "Anna" },
+  { id: 8, citazione: "Fatturare era una tortura. Ora lo fanno loro in 5 minuti. Io penso solo agli accordi.", nome: "Davide" },
 ]
 
 export function Testimonianze() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.2 })
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
 
   const duplicated = [...testimonianze, ...testimonianze, ...testimonianze]
 
-  const colonne = [
-    duplicated.filter((_, i) => i % 3 === 0),
-    duplicated.filter((_, i) => i % 3 === 1),
-    duplicated.filter((_, i) => i % 3 === 2),
-  ]
+  // Su mobile: UNA colonna con tutte le testimonianze
+  // Su desktop: TRE colonne
+  const colonne = isMobile
+    ? [duplicated]
+    : [
+        duplicated.filter((_, i) => i % 3 === 0),
+        duplicated.filter((_, i) => i % 3 === 1),
+        duplicated.filter((_, i) => i % 3 === 2),
+      ]
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -124,7 +104,7 @@ export function Testimonianze() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative h-[500px] md:h-[600px] overflow-hidden">
+          <div className={`grid grid-cols-1 ${colonne.length > 1 ? "md:grid-cols-3" : ""} gap-6 md:gap-8 relative h-[500px] md:h-[600px] overflow-hidden`}>
             {colonne.map((colonna, colIndex) => (
               <ScrollableColumn
                 key={colIndex}
@@ -163,18 +143,13 @@ function ScrollableColumn({
     let animFrame: number
     let paused = false
     let scrollPos = 0
-
     const totalHeight = content.scrollHeight
 
     const step = () => {
       if (!paused) {
         scrollPos += direction * speed
-        if (scrollPos >= totalHeight / 2) {
-          scrollPos = 0
-        }
-        if (scrollPos < 0) {
-          scrollPos = totalHeight / 2
-        }
+        if (scrollPos >= totalHeight / 2) scrollPos = 0
+        if (scrollPos < 0) scrollPos = totalHeight / 2
         container.scrollTop = scrollPos
       }
       animFrame = requestAnimationFrame(step)
@@ -196,10 +171,7 @@ function ScrollableColumn({
   }, [direction, speed])
 
   return (
-    <div
-      ref={containerRef}
-      className="relative h-full overflow-hidden rounded-2xl"
-    >
+    <div ref={containerRef} className="relative h-full overflow-hidden rounded-2xl">
       <div ref={contentRef} className="flex flex-col gap-4 p-2">
         {items.map((item, index) => (
           <div

@@ -205,7 +205,8 @@ export function TeaserCalcolatore() {
           titleComponent={
             <div className="max-w-3xl mx-auto mb-4 text-center px-4">
               <div className="flex items-center justify-center mb-4">
-                <span className="font-sans text-[#E0A96D]/60 text-xs tracking-[0.3em] uppercase font-medium">IL CALCOLATORE</span>
+                {/* EYEBROW — allineato a text-[11px] come le altre sezioni */}
+                <span className="font-sans text-[#E0A96D]/60 text-[11px] tracking-[0.3em] uppercase font-medium">IL CALCOLATORE</span>
               </div>
               <h2 className="text-[clamp(2.2rem,4.5vw,4rem)] text-[#F2EDE4] leading-[1.08] tracking-tight">
                 <span className="font-serif italic text-[#E0A96D]">Quanto ti resta</span>

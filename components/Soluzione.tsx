@@ -67,7 +67,7 @@ export function Soluzione() {
 
           <h2 
             className="font-sans font-bold leading-[1.15] tracking-tight mt-4 mb-2 text-[#F2EDE4]"
-            style={{ fontSize: "clamp(2rem, 3.8vw, 3.2rem)" }}
+            style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}
           >
             Agibilità, contributi, scadenze.
             <br />

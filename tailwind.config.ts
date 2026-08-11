@@ -1,4 +1,7 @@
 import type { Config } from "tailwindcss"
+import typography from "@tailwindcss/typography"
+import containerQueries from "@tailwindcss/container-queries"
+// import fluid from "tailwindcss-fluid" // (opzionale, decommenta se vuoi usarlo)
 
 const config: Config = {
   content: [
@@ -16,7 +19,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)"],
-  serif: ["var(--font-serif)"],
+        serif: ["var(--font-serif)"],
       },
       animation: {
         shimmer: "shimmer 3s linear infinite",
@@ -34,7 +37,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [typography, containerQueries],
 }
 
 export default config

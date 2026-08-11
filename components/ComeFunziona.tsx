@@ -118,13 +118,13 @@ export function ComeFunziona() {
       ref={ref}
       className="relative w-full py-24 md:py-32 overflow-hidden bg-[#0A0A0A]"
     >
-      {/* SFONDO — GLOW DOLCE (adattato al dark) */}
+      {/* SFONDO — GLOW DOLCE */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-amber-400/8 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-purple-400/5 rounded-full blur-[150px]" />
       </div>
 
-      <div ref={progressRef} className="relative z-10 max-w-4xl mx-auto w-full px-6 md:px-12">
+      <div ref={progressRef} className="relative z-10 max-w-6xl mx-auto w-full px-6 md:px-12">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -133,6 +133,13 @@ export function ComeFunziona() {
         >
           {/* HEADER */}
           <div className="text-center max-w-3xl mx-auto">
+            <motion.span
+              variants={itemVariants}
+              className="font-sans text-[#E0A96D]/60 text-[11px] tracking-[0.3em] uppercase font-medium"
+            >
+              IL PERCORSO
+            </motion.span>
+
             <motion.h2
               variants={itemVariants}
               className="font-sans font-bold leading-[1.05] tracking-tight shimmer-text"
@@ -157,12 +164,10 @@ export function ComeFunziona() {
             </motion.p>
           </div>
 
-          {/* TIMELINE VERTICALE — SENZA NUMERI NEI CERCHI */}
-          <div className="relative max-w-2xl mx-auto w-full pt-8 pb-4">
-            {/* Linea di sfondo */}
+          {/* TIMELINE VERTICALE */}
+          <div className="relative max-w-3xl mx-auto w-full pt-8 pb-4">
             <div className="absolute left-[30px] top-0 bottom-0 w-[3px] bg-[#F2EDE4]/10 rounded-full" />
 
-            {/* Linea di luce che si riempie */}
             <motion.div
               className="absolute left-[30px] top-0 w-[3px] bg-[#E0A96D] rounded-full shadow-[0_0_20px_rgba(224,169,109,0.4)]"
               style={{
@@ -172,7 +177,6 @@ export function ComeFunziona() {
               transition={{ duration: 0.3 }}
             />
 
-            {/* Glow sulla linea */}
             <motion.div
               className="absolute left-[30px] top-0 w-[12px] -translate-x-1/2 rounded-full blur-xl"
               style={{
@@ -197,7 +201,6 @@ export function ComeFunziona() {
                     index === 0 ? "" : "pt-4"
                   }`}
                 >
-                  {/* PALLINO INDICATORE */}
                   <motion.div
                     className="relative z-10 w-3 h-3 rounded-full bg-[#0A0A0A] border-2 transition-colors duration-500 shadow-[0_4px_20px_rgba(0,0,0,0.04)]"
                     style={{
@@ -208,7 +211,6 @@ export function ComeFunziona() {
                     }}
                   />
 
-                  {/* Contenuto dello step */}
                   <motion.div
                     className="flex-1 pt-1"
                     initial={{ opacity: 0, x: 20 }}
@@ -218,7 +220,6 @@ export function ComeFunziona() {
                     }}
                     transition={{ duration: 0.5 }}
                   >
-                    {/* NUMERO GRANDE — SERIF ITALIC */}
                     <span
                       className="font-serif italic font-black text-7xl md:text-8xl leading-none tracking-tight transition-colors duration-700"
                       style={{
@@ -237,11 +238,10 @@ export function ComeFunziona() {
                       {step.title}
                     </h3>
 
-                    <p className="font-sans font-light text-[#F2EDE4]/60 text-base md:text-lg mt-1 max-w-[40ch] leading-relaxed">
+                    <p className="font-sans font-light text-[#F2EDE4]/70 text-sm md:text-base mt-1 max-w-[40ch] leading-relaxed">
                       {step.description}
                     </p>
 
-                    {/* Link Approfondisci */}
                     <Link
                       href={`/approfondisci/${step.slug}`}
                       className="inline-flex items-center gap-1 text-[#E0A96D] text-sm font-medium mt-3 hover:underline transition-colors"
@@ -250,7 +250,6 @@ export function ComeFunziona() {
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
 
-                    {/* Linea decorativa sotto ogni step */}
                     <motion.div
                       className="w-16 h-0.5 rounded-full mt-4 transition-colors duration-700"
                       style={{
@@ -265,11 +264,13 @@ export function ComeFunziona() {
             })}
           </div>
 
-          {/* BLOCCO PREZZO — con "a partire da" */}
+          {/* ============================================================
+              BLOCCO PREZZO — DEFINITIVO (PLUG-AND-PLAY)
+              ============================================================ */}
           <motion.div
             ref={priceRef}
             variants={itemVariants}
-            className="relative max-w-2xl mx-auto w-full mt-8"
+            className="relative max-w-3xl mx-auto w-full mt-8"
           >
             <motion.div
               className="absolute -inset-8 bg-[#E0A96D]/10 blur-3xl rounded-3xl"
@@ -278,20 +279,20 @@ export function ComeFunziona() {
               transition={{ duration: 1 }}
             />
 
-            <div className="relative p-10 md:p-14 rounded-3xl border border-[#E0A96D]/25 bg-[#0A0A0A] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.2)]">
+            <div className="relative p-8 md:p-12 rounded-3xl border border-[#E0A96D]/25 bg-[#0A0A0A] overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.2)]">
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E0A96D]/40 to-transparent" />
               <div className="absolute -top-32 -right-32 w-80 h-80 bg-[#E0A96D]/8 rounded-full blur-3xl" />
               <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-[#E0A96D]/8 rounded-full blur-3xl" />
 
-              <div className="relative z-10 text-center">
+              <div className="relative z-10 text-center space-y-4 md:space-y-6">
                 <span className="font-sans text-[#F2EDE4]/30 text-[10px] tracking-[0.25em] uppercase font-medium">
                   Quota annuale
                 </span>
 
-                <div className="flex items-center justify-center gap-3 mt-2">
+                <div className="flex items-center justify-center gap-3">
                   <motion.span
                     className="font-sans font-bold text-[#F2EDE4] leading-none tracking-tight"
-                    style={{ fontSize: "clamp(3.5rem, 7vw, 5rem)" }}
+                    style={{ fontSize: "clamp(3.5rem, 6vw, 5rem)" }}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
@@ -304,7 +305,7 @@ export function ComeFunziona() {
                 </div>
 
                 <motion.p
-                  className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base mt-3 max-w-[45ch] mx-auto leading-relaxed"
+                  className="font-sans font-light text-[#F2EDE4]/60 text-sm md:text-base max-w-[45ch] mx-auto leading-relaxed"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: priceInView ? 1 : 0, y: priceInView ? 0 : 10 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
@@ -317,7 +318,7 @@ export function ComeFunziona() {
                 </motion.p>
 
                 <motion.div
-                  className="mt-6 flex justify-center"
+                  className="mt-6"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: priceInView ? 1 : 0, y: priceInView ? 0 : 10 }}
                   transition={{ duration: 0.6, delay: 0.7 }}
@@ -326,7 +327,7 @@ export function ComeFunziona() {
                     ref={buttonRef}
                     onMouseMove={handleMagneticMove}
                     onMouseLeave={handleMagneticLeave}
-                    className="group relative flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] font-sans font-medium text-sm tracking-[0.15em] uppercase"
+                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-[#F2EDE4] text-black rounded-full overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(224,169,109,0.3)] font-sans font-medium text-sm tracking-[0.15em] uppercase"
                     style={{
                       transform: `translate(${buttonX.get()}px, ${buttonY.get()}px)`,
                     }}

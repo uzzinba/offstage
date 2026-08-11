@@ -72,6 +72,26 @@ export function PercheNoi() {
       ref={ref}
       className="relative w-full py-24 md:py-32 overflow-hidden bg-[#0A0A0A]"
     >
+      {/* ============================================================
+          SFONDO CON IMMAGINE — come nella sezione IL CALCOLATORE
+          ============================================================ */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+        <img
+          src="/perche-noi-bg.png"
+          alt="Background OFF STAGE"
+          className="w-full h-full object-cover opacity-25"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src.endsWith(".png")) {
+              target.src = "/perche-noi-bg.jpg";
+            }
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/50 to-[#0A0A0A]" />
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-[1.5px]" />
+      </div>
+
+      {/* Glow ambientale */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-20 right-1/4 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[150px]" />
