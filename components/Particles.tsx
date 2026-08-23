@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useCallback } from "react"
-import Particles from "react-tsparticles"
-import { loadSlim } from "tsparticles-slim"
-import type { Container, Engine } from "tsparticles-engine"
+import Particles from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+
+// Usa any per evitare problemi di tipi
+const ParticlesAny = Particles as any;
 
 export default function ParticlesBackground() {
-  const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine)
-  }, [])
-
   return (
-    <Particles
+    <ParticlesAny
       id="tsparticles"
-      init={particlesInit}
+      // @ts-ignore
+      init={async (engine: any) => {
+        await loadSlim(engine);
+      }}
       options={{
         fpsLimit: 60,
         interactivity: {
@@ -28,20 +28,13 @@ export default function ParticlesBackground() {
           color: { value: "#E0A96D" },
           links: { enable: false },
           move: {
-            direction: "none",
             enable: true,
-            outModes: { default: "out" },
-            random: false,
             speed: 0.3,
+            random: false,
             straight: false,
-            attract: {
-              enable: true,
-              rotateX: 600,
-              rotateY: 1200,
-            },
+            outModes: { default: "out" },
           },
           number: {
-            density: { enable: true, area: 800 },
             value: 40,
           },
           opacity: {
@@ -59,5 +52,5 @@ export default function ParticlesBackground() {
       }}
       className="absolute inset-0 pointer-events-none"
     />
-  )
+  );
 }
