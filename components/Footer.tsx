@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Mail } from "lucide-react"
+import { Mail, MessageCircle, Phone } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -45,14 +45,18 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COLONNA 3 — CONTATTI (Solo Email) */}
+          {/* COLONNA 3 — CONTATTI (Sede di Viadana + Sede di Milano) */}
           <div className="md:col-span-5">
             <span className="font-sans text-[#F2EDE4]/20 text-[10px] tracking-[0.2em] uppercase font-medium">
               Contatti
             </span>
 
             <div className="mt-3 flex flex-col gap-3">
-              {/* Email — SEDE PRINCIPALE */}
+              {/* Sede di Viadana */}
+              <span className="font-sans text-[#F2EDE4]/45 text-xs font-medium">
+                Sede di Viadana
+              </span>
+              {/* Email */}
               <a
                 href="mailto:offstagecoop.nicole@gmail.com"
                 className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
@@ -60,6 +64,30 @@ export function Footer() {
                 <Mail className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
                 <span className="text-sm">offstagecoop.nicole@gmail.com</span>
               </a>
+
+              {/* WhatsApp */}
+              <a
+                href="https://wa.me/393280052104"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
+              >
+                <MessageCircle className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
+                <span className="text-sm">WhatsApp</span>
+              </a>
+
+              {/* Sede di Milano — DA COMPLETARE: sostituire i segnaposto e trasformarli in link ("mailto:..." e "tel:...") */}
+              <span className="font-sans text-[#F2EDE4]/45 text-xs font-medium mt-3">
+                Sede di Milano
+              </span>
+              <span className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4]">
+                <Mail className="w-5 h-5 text-[#E0A96D]" />
+                <span className="text-sm">[mail Milano]</span>
+              </span>
+              <span className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4]">
+                <Phone className="w-5 h-5 text-[#E0A96D]" />
+                <span className="text-sm">[nr di telefono Milano]</span>
+              </span>
             </div>
           </div>
         </div>

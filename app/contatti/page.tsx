@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 import { motion, useInView, Variants } from "framer-motion"
-import { Mail, MapPin, Send, CheckCircle } from "lucide-react"
+import { Building2, Mail, MapPin, MessageCircle, Phone, Send, CheckCircle } from "lucide-react"
 
 export default function Contatti() {
   const ref = useRef<HTMLDivElement>(null)
@@ -37,20 +37,35 @@ export default function Contatti() {
     setTimeout(() => setFormSubmitted(false), 4000)
   }
 
-  const contatti = [
+  // Un riquadro per sede. Ogni riga con href diventa un link a sé
+  // (se un riquadro ha una sola riga con href, diventa cliccabile tutto il riquadro).
+  const contatti: {
+    icon: React.ReactNode
+    title: string
+    righe: { testo: string; href?: string; icona?: React.ReactNode }[]
+  }[] = [
     {
-      icon: <Mail className="w-6 h-6" />,
-      title: "Email",
-      value: "offstagecoop.nicole@gmail.com",
-      href: "mailto:offstagecoop.nicole@gmail.com",
+      icon: <Building2 className="w-6 h-6" />,
+      title: "Sede di Viadana",
+      righe: [
+        { icona: <MapPin className="w-4 h-4" />, testo: "Via Puttina 11, 46019 Viadana (MN)", href: "https://maps.google.com/?q=Via+Puttina+11+46019+Viadana" },
+        { icona: <Mail className="w-4 h-4" />, testo: "offstagecoop.nicole@gmail.com", href: "mailto:offstagecoop.nicole@gmail.com" },
+        { icona: <MessageCircle className="w-4 h-4" />, testo: "WhatsApp +39 328 005 2104", href: "https://wa.me/393280052104" },
+      ],
     },
     {
-      icon: <MapPin className="w-6 h-6" />,
-      title: "Sede legale",
-      value: "Via Puttina 11, 46019 Viadana (MN)",
-      href: "https://maps.google.com/?q=Via+Puttina+11+46019+Viadana",
+      icon: <Building2 className="w-6 h-6" />,
+      title: "Sede di Milano",
+      // DA COMPLETARE: sostituire i segnaposto con i dati reali e aggiungere gli href ("mailto:..." e "tel:...")
+      righe: [
+        { icona: <Mail className="w-4 h-4" />, testo: "[mail Milano]" },
+        { icona: <Phone className="w-4 h-4" />, testo: "[nr di telefono Milano]" },
+      ],
     },
   ]
+
+  const linkEsterno = (href?: string) =>
+    href?.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {}
 
   return (
     <section
@@ -100,33 +115,65 @@ export default function Contatti() {
           {/* GRIGLIA CONTATTI — SENZA SOTTOTITOLI */}
           <motion.div
             variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto w-full"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto w-full"
           >
-            {contatti.map((contatto, index) => (
-              <motion.a
-                key={index}
-                variants={itemVariants}
-                href={contatto.href}
-                className="relative p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:border-[#E0A96D]/30 transition-all duration-500 group"
-                whileHover={{ y: -4, scale: 1.01 }}
-                target={contatto.href.startsWith("http") ? "_blank" : undefined}
-                rel={contatto.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              >
-                <div className="flex items-start gap-5">
+            {contatti.map((contatto, index) => {
+              const linkRiquadro = contatto.righe.length === 1 ? contatto.righe[0].href : undefined
+              const classi = `relative p-6 md:p-8 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm hover:border-[#E0A96D]/30 transition-all duration-500 group ${
+                contatti.length % 2 === 1 && index === contatti.length - 1 ? "md:col-span-2" : ""
+              }`
+              const contenuto = (
+                <div className="flex flex-col md:flex-row items-start gap-4 md:gap-5">
                   <div className="p-3 rounded-xl bg-[#E0A96D]/10 border border-[#E0A96D]/20 text-[#E0A96D] shrink-0 group-hover:scale-110 transition-transform duration-300">
                     {contatto.icon}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-sans font-bold text-[#F2EDE4] text-lg">
                       {contatto.title}
                     </h3>
-                    <p className="font-sans text-[#E0A96D] text-sm md:text-base font-medium mt-1 group-hover:underline">
-                      {contatto.value}
-                    </p>
+                    {contatto.righe.map((riga) => {
+                      const interno = (
+                        <>
+                          {riga.icona && <span className="shrink-0 mt-0.5 md:mt-1 text-[#E0A96D]/70">{riga.icona}</span>}
+                          <span className="min-w-0 [overflow-wrap:anywhere]">{riga.testo}</span>
+                        </>
+                      )
+                      const classeRiga = "flex items-start gap-2 font-sans text-[#E0A96D] text-sm md:text-base font-medium mt-1.5"
+                      return riga.href && !linkRiquadro ? (
+                        <a key={riga.testo} href={riga.href} {...linkEsterno(riga.href)} className={`${classeRiga} hover:underline`}>
+                          {interno}
+                        </a>
+                      ) : (
+                        <p key={riga.testo} className={`${classeRiga} ${linkRiquadro ? "group-hover:underline" : ""}`}>
+                          {interno}
+                        </p>
+                      )
+                    })}
                   </div>
                 </div>
-              </motion.a>
-            ))}
+              )
+              return linkRiquadro ? (
+                <motion.a
+                  key={index}
+                  variants={itemVariants}
+                  href={linkRiquadro}
+                  {...linkEsterno(linkRiquadro)}
+                  className={classi}
+                  whileHover={{ y: -4, scale: 1.01 }}
+                >
+                  {contenuto}
+                </motion.a>
+              ) : (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className={classi}
+                  whileHover={{ y: -4, scale: 1.01 }}
+                >
+                  {contenuto}
+                </motion.div>
+              )
+            })}
           </motion.div>
 
           {/* FORM */}

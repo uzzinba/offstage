@@ -315,17 +315,6 @@ export function TeaserCalcolatore() {
                   <span className="text-[10px] md:text-xs uppercase tracking-[0.15em] text-[#F2EDE4]/30">
                     {modalita === "diretta" ? "Netto finale in tasca" : "Fattura da emettere"}
                   </span>
-                  <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 rounded-full border border-[#E0A96D]/20 bg-[#E0A96D]/10 px-3.5 md:px-5 py-2 md:py-2.5 text-xs md:text-sm font-medium uppercase tracking-[0.1em] text-[#E0A96D]">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5">
-                        <rect x="3" y="3" width="18" height="18" rx="2" />
-                        <line x1="3" y1="9" x2="21" y2="9" />
-                        <line x1="9" y1="3" x2="9" y2="21" />
-                      </svg>
-                      <span>{dati.giornate} {dati.giornate === 1 ? "giornata" : "giornate"}</span>
-                    </div>
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-xs font-semibold text-white/50">i</span>
-                  </div>
                 </div>
 
                 <div className={`relative z-10 text-[2.5rem] md:text-[4rem] font-semibold leading-none tracking-[-0.02em] text-[#F2EDE4] transition-transform duration-200 ${pop ? "scale-[1.06]" : "scale-100"}`}>

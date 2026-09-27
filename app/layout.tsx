@@ -19,7 +19,7 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: "OFF STAGE — Al resto pensiamo noi.",
-  description: "Cooperativa per musicisti dal 1991. Gestiamo la burocrazia, tu suoni.",
+  description: "Cooperativa per lavoratori dello spettacolo dal 1991. Gestiamo la burocrazia, tu suoni.",
 }
 
 export default function RootLayout({

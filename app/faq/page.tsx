@@ -5,11 +5,103 @@ import { motion, useInView, Variants, AnimatePresence } from "framer-motion"
 import { ChevronDown, ChevronUp } from "lucide-react"
 import Link from "next/link"
 
-const faqData = [
+type FaqItem = {
+  id: string
+  question: string
+  answer: React.ReactNode
+}
+
+// Aliquote IVA per tipo di esibizione — dal documento "Aliquote IVA spettacoli" della cooperativa
+// (Agenzia delle Entrate, risoluzione n. 257/E del 20/06/2008)
+const aliquoteIva = [
+  { tipo: "Teatro", nota: "Qualsiasi spettacolo: concerti, danza, commedie, cabaret, magia…", iva: "10%" },
+  { tipo: "Concerto in piazza", nota: "Di solito organizzato da Comune o Pro Loco; eventuali chioschi sono solo di servizio", iva: "10%" },
+  { tipo: "Concerto in rock club o sala concerti", nota: "Il locale è strutturato per i concerti, il bar è solo di servizio al pubblico", iva: "10%" },
+  { tipo: "Concerto in pub, bar, ristorante o hotel", nota: "L'esibizione serve a intrattenere i clienti del locale", iva: "22%" },
+  { tipo: "DJ set", nota: "Sempre, in qualsiasi location", iva: "22%" },
+  { tipo: "Karaoke", nota: "Sempre, in qualsiasi location", iva: "22%" },
+  { tipo: "Orchestra di liscio", nota: "È considerata intrattenimento danzante", iva: "22%" },
+  { tipo: "Pianobar", nota: "Anche a matrimoni e feste private", iva: "22%" },
+  { tipo: "Prestigiatore o cabaret in pub, bar, ristorante o hotel", nota: null, iva: "22%" },
+  { tipo: "Presentatore", nota: null, iva: "22%" },
+]
+
+function RispostaIVA() {
+  return (
+    <>
+      <p>
+        Dipende dal ruolo che l&apos;esibizione ha per il pubblico. L&apos;Agenzia delle Entrate
+        (risoluzione n. 257/E del 20 giugno 2008) distingue tra{" "}
+        <strong className="font-medium text-[#F2EDE4]">spettacolo</strong>, quando l&apos;esibizione è
+        l&apos;attrazione principale, e <strong className="font-medium text-[#F2EDE4]">intrattenimento</strong>,
+        quando fa da contorno, accompagnamento o sottofondo a un&apos;altra attività.
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="rounded-xl border border-[#E0A96D]/25 bg-[#E0A96D]/[0.06] p-4">
+          <p className="font-medium text-[#E0A96D]">IVA al 10% · Spettacolo</p>
+          <p className="mt-1 text-sm">
+            Concerti e altre esibizioni artistiche in spazi dedicati a concerti e spettacoli: teatri,
+            sale concerto, auditorium, ma anche piazze, stadi e aree allestite per l&apos;occasione.
+          </p>
+        </div>
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="font-medium text-[#F2EDE4]">IVA al 22% · Intrattenimento</p>
+          <p className="mt-1 text-sm">
+            Esibizioni legate alla ristorazione o all&apos;intrattenimento dei clienti. Si applica
+            sempre in bar, pub, ristoranti e hotel.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <p className="font-medium text-[#F2EDE4]">Aliquota per tipo di esibizione</p>
+        <ul className="mt-2 divide-y divide-white/5">
+          {aliquoteIva.map(({ tipo, nota, iva }) => (
+            <li key={tipo} className="flex items-start justify-between gap-4 py-2.5">
+              <span>
+                <span className="text-[#F2EDE4]/85">{tipo}</span>
+                {nota && <span className="block text-xs md:text-sm text-[#F2EDE4]/45">{nota}</span>}
+              </span>
+              <span
+                className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium tabular-nums ${
+                  iva === "10%" ? "bg-[#E0A96D]/15 text-[#E0A96D]" : "bg-white/10 text-[#F2EDE4]/80"
+                }`}
+              >
+                IVA {iva}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <p className="font-medium text-[#F2EDE4]">Sagre e feste di paese</p>
+        <p className="mt-1">
+          DJ set, karaoke, orchestre di liscio e pianobar restano sempre al 22%. Concerti (rock, pop,
+          musica leggera), cabaret, magia e arte varia dipendono invece da come l&apos;esibizione si
+          inserisce nella festa:
+        </p>
+        <ul className="mt-2 space-y-1.5 list-disc pl-5 marker:text-[#E0A96D]">
+          <li>
+            <strong className="font-medium text-[#F2EDE4]">10%</strong> se si svolge su un palco con uno
+            spazio davanti riservato al pubblico, seduto o in piedi, e non è legata alla zona dove si mangia;
+          </li>
+          <li>
+            <strong className="font-medium text-[#F2EDE4]">22%</strong> se è legata alla zona ristorazione
+            e diventa intrattenimento per chi mangia e beve.
+          </li>
+        </ul>
+      </div>
+    </>
+  )
+}
+
+const faqData: FaqItem[] = [
   {
     id: "faq-1",
     question: "Cos'è OFF STAGE?",
-    answer: "OFF STAGE è una cooperativa che gestisce la burocrazia per musicisti e insegnanti di musica. Ci occupiamo di agibilità INPS, fatture, buste paga, contributi e tutto ciò che serve per essere in regola. Tu suoni, al resto pensiamo noi.",
+    answer: "OFF STAGE è una cooperativa che gestisce la burocrazia per i lavoratori dello spettacolo e gli insegnanti di musica. Ci occupiamo di agibilità, fatture, buste paga, contributi e tutto ciò che serve per essere in regola. Tu suoni, al resto pensiamo noi.",
   },
   {
     id: "faq-2",
@@ -19,22 +111,34 @@ const faqData = [
   {
     id: "faq-3",
     question: "Cosa significa esenzione contributiva?",
-    answer: "L'esenzione contributiva è una riduzione della quota INPS per i lavoratori dello spettacolo che hanno determinate caratteristiche. Con la gestione OFF STAGE, se sei esente paghi contributi ridotti (6,60€/giornata invece di 29,35€).",
+    answer: "L'esenzione consiste in una riduzione della quota contributiva, riservata ai lavoratori dello spettacolo che hanno determinati requisiti.",
   },
   {
-    id: "faq-4",
-    question: "Quali sono i costi esatti di OFF STAGE?",
-    answer: "La quota annuale parte da 75 € all'anno, che ti dà accesso a un ufficio amministrativo dedicato. Possono applicarsi costi aggiuntivi in base alle tue esigenze specifiche (es. numero di pratiche, collaboratori, ecc.). Ti faremo sempre un preventivo chiaro prima di iniziare.",
+    id: "faq-iva",
+    question: "Quale IVA si applica alle esibizioni: 10% o 22%?",
+    answer: <RispostaIVA />,
   },
   {
     id: "faq-5",
     question: "Come funziona il calcolatore del netto?",
-    answer: "Il calcolatore ti permette di stimare quanto ti resta di una serata. Inserisci il cachet, scegli se sei esente o meno, e vedi in tempo reale il netto stimato (contributi, quota coop, busta paga). È uno strumento indicativo — il netto reale può essere più alto grazie al recupero IVA e alle spese deducibili.",
+    answer: "Il calcolatore ti permette di stimare quanto ti resta di una serata. Inserisci il cachet, scegli se sei esente o meno, e vedi in tempo reale il netto stimato (contributi, quota coop, busta paga). È uno strumento indicativo — il netto reale può essere più alto grazie alle spese deducibili.",
   },
   {
     id: "faq-6",
-    question: "Chi c'è dietro OFF STAGE?",
-    answer: "Dietro OFF STAGE ci sono persone vere che lavorano nel mondo della musica. Conosciamo le esigenze di chi suona e lavora nello spettacolo. Quando ci scrivi, ti risponde qualcuno che c'è davvero — da oltre trent'anni.",
+    question: "Chi siamo?",
+    answer: (
+      <>
+        <p>
+          OFF STAGE è una cooperativa musicale attiva dal 1991. Da oltre trent&apos;anni affianchiamo i
+          lavoratori dello spettacolo in agibilità, fatture, buste paga e contributi: un&apos;esperienza
+          maturata sul campo, serata dopo serata.
+        </p>
+        <p>
+          Dietro OFF STAGE ci sono persone vere che lavorano nel mondo della musica. Conosciamo le esigenze
+          di chi suona e lavora nello spettacolo. Quando ci scrivi, ti risponde qualcuno che c&apos;è davvero.
+        </p>
+      </>
+    ),
   },
   {
     id: "faq-7",
@@ -166,10 +270,8 @@ export default function FAQ() {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="px-6 md:px-8 pb-6 md:pb-8 pt-2 border-t border-white/5">
-                          <p className="font-sans font-light text-[#F2EDE4]/70 text-sm md:text-base leading-relaxed">
-                            {faq.answer}
-                          </p>
+                        <div className="px-6 md:px-8 pb-6 md:pb-8 pt-2 border-t border-white/5 space-y-4 font-sans font-light text-[#F2EDE4]/70 text-sm md:text-base leading-relaxed">
+                          {typeof faq.answer === "string" ? <p>{faq.answer}</p> : faq.answer}
                           {/* LINK RIMOSSI */}
                         </div>
                       </motion.div>
