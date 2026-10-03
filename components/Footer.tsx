@@ -76,18 +76,24 @@ export function Footer() {
                 <span className="text-sm">WhatsApp</span>
               </a>
 
-              {/* Sede di Milano — DA COMPLETARE: sostituire i segnaposto e trasformarli in link ("mailto:..." e "tel:...") */}
+              {/* Sede di Milano */}
               <span className="font-sans text-[#F2EDE4]/45 text-xs font-medium mt-3">
                 Sede di Milano
               </span>
-              <span className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4]">
-                <Mail className="w-5 h-5 text-[#E0A96D]" />
-                <span className="text-sm">[mail Milano]</span>
-              </span>
-              <span className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4]">
-                <Phone className="w-5 h-5 text-[#E0A96D]" />
-                <span className="text-sm">[nr di telefono Milano]</span>
-              </span>
+              <a
+                href="mailto:offstage.coop@gmail.com"
+                className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
+              >
+                <Mail className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
+                <span className="text-sm">offstage.coop@gmail.com</span>
+              </a>
+              <a
+                href="tel:+393284736241"
+                className="inline-flex items-center gap-2.5 font-sans text-[#F2EDE4] hover:text-[#E0A96D] transition-colors duration-300 group"
+              >
+                <Phone className="w-5 h-5 text-[#E0A96D] group-hover:scale-110 transition-transform duration-300" />
+                <span className="text-sm">+39 328 473 6241</span>
+              </a>
             </div>
           </div>
         </div>

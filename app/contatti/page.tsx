@@ -56,10 +56,10 @@ export default function Contatti() {
     {
       icon: <Building2 className="w-6 h-6" />,
       title: "Sede di Milano",
-      // DA COMPLETARE: sostituire i segnaposto con i dati reali e aggiungere gli href ("mailto:..." e "tel:...")
       righe: [
-        { icona: <Mail className="w-4 h-4" />, testo: "[mail Milano]" },
-        { icona: <Phone className="w-4 h-4" />, testo: "[nr di telefono Milano]" },
+        { icona: <MapPin className="w-4 h-4" />, testo: "Via Zuavi 31, 20077 Melegnano (MI)", href: "https://maps.google.com/?q=Via+Zuavi+31+20077+Melegnano" },
+        { icona: <Mail className="w-4 h-4" />, testo: "offstage.coop@gmail.com", href: "mailto:offstage.coop@gmail.com" },
+        { icona: <Phone className="w-4 h-4" />, testo: "+39 328 473 6241", href: "tel:+393284736241" },
       ],
     },
   ]
